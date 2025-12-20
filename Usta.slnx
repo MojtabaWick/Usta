@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/00.Framewrok/">
+    <Project Path="src/00.Framewrok/Usta.Framework/Usta.Framework.csproj" />
+  </Folder>
+  <Folder Name="/src/01.Domain/" />
+  <Folder Name="/src/01.Domain/Core/">
+    <Project Path="src/01.Domain/Core/Usta.Domain.Core/Usta.Domain.Core.csproj" />
+  </Folder>
+  <Folder Name="/src/01.Domain/Services/">
+    <Project Path="src/01.Domain/Service/Usta.Domain.Service.AppService/Usta.Domain.AppService.csproj" />
+    <Project Path="src/01.Domain/Service/Usta.Domain.Service/Usta.Domain.Service.csproj" />
+  </Folder>
+  <Folder Name="/src/02.Infrastructure/">
+    <Project Path="src/02.Infrastructure/Usta.Infrastructure.EFCore/Usta.Infrastructure.EFCore.csproj" />
+  </Folder>
+  <Folder Name="/src/03.Presentation/">
+    <Project Path="src/03.Presentation/Usta.Presentation.RazorPages/Usta.Presentation.RazorPages.csproj" Id="ee5faf83-791d-4996-99aa-7e26d70e723e" />
+  </Folder>
+</Solution>
