@@ -6,4 +6,26 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="CategoryAgg\Contracts\" />
+    <Folder Include="CategoryAgg\Dtos\" />
+    <Folder Include="CityAgg\Contracts\" />
+    <Folder Include="CityAgg\Dtos\" />
+    <Folder Include="CommentAgg\Contracts\" />
+    <Folder Include="CommentAgg\Dtos\" />
+    <Folder Include="OfferAgg\Contracts\" />
+    <Folder Include="OfferAgg\Dtos\" />
+    <Folder Include="OrderAgg\Contracts\" />
+    <Folder Include="OrderAgg\Dtos\" />
+    <Folder Include="ProvidedServiceAgg\Contracts\" />
+    <Folder Include="ProvidedServiceAgg\Dtos\" />
+    <Folder Include="UserAgg\Contracts\" />
+    <Folder Include="UserAgg\Dtos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
+  </ItemGroup>
+
 </Project>
