@@ -9,13 +9,15 @@ namespace Usta.Domain.Core.OfferAgg.Entities
         #region Properties
 
         public decimal Price { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public DateTime FinishDateTime { get; set; }
         public bool IsAccepted { get; set; }
 
         #endregion Properties
 
         #region NavigationProperties
+
+        public List<OfferImage> Images { get; set; } = [];
 
         public int OrderId { get; set; }
         public Order Order { get; set; }

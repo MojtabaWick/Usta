@@ -1,4 +1,5 @@
-﻿using Usta.Domain.Core.CommentAgg.Entities;
+﻿using Usta.Domain.Core._common;
+using Usta.Domain.Core.CommentAgg.Entities;
 using Usta.Domain.Core.OrderAgg.Entities;
 
 namespace Usta.Domain.Core.UserAgg.Entities

@@ -11,7 +11,6 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Entities
 
         public string Title { get; set; }
         public string? Description { get; set; }
-        public string? ImgUrl { get; set; }
 
         #endregion Properties
 
@@ -19,6 +18,8 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Entities
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public ProvidedServiceImage? Image { get; set; }
 
         public List<Order> Orders { get; set; } = [];
         public List<Expert> Experts { get; set; } = [];

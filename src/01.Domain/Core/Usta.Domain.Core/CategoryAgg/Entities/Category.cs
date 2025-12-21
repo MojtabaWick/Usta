@@ -12,9 +12,9 @@ namespace Usta.Domain.Core.CategoryAgg.Entities
 
         #endregion Properties
 
-
-
         #region NavigationProperties
+
+        public CategoryImage CategoryImage { get; set; }
 
         public List<ProvidedService> ProvidedServices { get; set; } = [];
 
