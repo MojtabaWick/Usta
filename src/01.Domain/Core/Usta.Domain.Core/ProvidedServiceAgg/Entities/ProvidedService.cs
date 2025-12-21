@@ -11,6 +11,7 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Entities
 
         public string Title { get; set; }
         public string? Description { get; set; }
+        public decimal MinPrice { get; set; }
 
         #endregion Properties
 

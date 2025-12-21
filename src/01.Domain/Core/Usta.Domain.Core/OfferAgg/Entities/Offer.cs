@@ -10,7 +10,7 @@ namespace Usta.Domain.Core.OfferAgg.Entities
 
         public decimal Price { get; set; }
         public string? Description { get; set; }
-        public DateTime FinishDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
         public bool IsAccepted { get; set; }
 
         #endregion Properties
