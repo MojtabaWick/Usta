@@ -13,7 +13,7 @@ namespace Usta.Infrastructure.EFCore.Configurations
         {
             builder.Property(x => x.Name)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(100);
 
             builder.HasMany(x => x.Users)
                 .WithOne(x => x.City)

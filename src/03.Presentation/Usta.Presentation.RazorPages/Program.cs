@@ -1,7 +1,42 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core.UserAgg.Entities;
+using Usta.Infrastructure.EFCore.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+#region RegisterService
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Usta;Trusted_Connection=True;"));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
+    {
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+        options.User.RequireUniqueEmail = false;
+        options.User.AllowedUserNameCharacters = "0123456789";
+
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 4;
+        options.Password.RequireNonAlphanumeric = false;
+    })
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";          // وقتی لاگین نکرده
+    options.AccessDeniedPath = "/Account/AccessDenied"; // وقتی نقش/پالیسی نداره
+});
+
+#endregion RegisterService
 
 var app = builder.Build();
 
@@ -14,9 +49,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

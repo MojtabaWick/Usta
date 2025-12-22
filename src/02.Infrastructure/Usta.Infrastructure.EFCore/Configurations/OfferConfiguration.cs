@@ -14,16 +14,21 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.Property(x => x.Price)
                 .HasPrecision(18, 0);
 
+            builder.Property(x => x.Description)
+                .HasMaxLength(1000);
+
             builder.Property(x => x.ImageUrl)
                 .HasMaxLength(500);
 
             builder.HasOne(x => x.Order)
                 .WithMany(x => x.Offers)
-                .HasForeignKey(x => x.OrderId);
+                .HasForeignKey(x => x.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(x => x.Expert)
                 .WithMany(x => x.Offers)
-                .HasForeignKey(x => x.ExpertId);
+                .HasForeignKey(x => x.ExpertId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

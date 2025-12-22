@@ -14,6 +14,11 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.Property(x => x.ImageUrl)
                 .IsRequired()
                 .HasMaxLength(500);
+
+            builder.HasOne(x => x.Order)
+                .WithMany(x => x.Images)
+                .HasForeignKey(x => x.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

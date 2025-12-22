@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.CategoryAgg.Entities;
 using Usta.Domain.Core.CityAgg.Entities;
@@ -21,6 +22,13 @@ namespace Usta.Infrastructure.EFCore.Persistence
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderImage> OrderImages { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .ConfigureWarnings(w =>
+                    w.Ignore(RelationalEventId.PendingModelChangesWarning));
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -17,11 +17,13 @@ namespace Usta.Infrastructure.EFCore.Configurations
 
             builder.HasOne(x => x.Order)
                 .WithOne(x => x.Comment)
-                .HasForeignKey<Comment>(x => x.OrderId);
+                .HasForeignKey<Comment>(x => x.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Expert)
                 .WithMany(x => x.Comments)
-                .HasForeignKey(x => x.ExpertId);
+                .HasForeignKey(x => x.ExpertId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

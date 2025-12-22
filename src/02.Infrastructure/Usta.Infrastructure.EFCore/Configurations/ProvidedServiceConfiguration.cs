@@ -15,6 +15,9 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
+            builder.Property(x => x.Description)
+                .HasMaxLength(1000);
+
             builder.Property(x => x.MinPrice)
                 .HasPrecision(18, 0);
 
@@ -24,6 +27,14 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.HasMany(x => x.Orders)
                 .WithOne(x => x.ProvidedService)
                 .HasForeignKey(x => x.ProvidedServiceId);
+
+            builder.HasMany(x => x.Experts)
+                .WithMany(x => x.ProvidedServices);
+
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.ProvidedServices)
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(x => x.Experts)
                 .WithMany(x => x.ProvidedServices);

@@ -17,7 +17,13 @@ namespace Usta.Infrastructure.EFCore.Configurations
 
             builder.HasOne(x => x.Customer)
                 .WithMany(x => x.Orders)
-                .HasForeignKey(x => x.CustomerId);
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.ProvidedService)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.ProvidedServiceId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.AcceptedOffer)
                 .WithMany()

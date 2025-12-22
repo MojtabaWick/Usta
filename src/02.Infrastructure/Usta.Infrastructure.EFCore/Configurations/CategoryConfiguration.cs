@@ -15,6 +15,9 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
+            builder.Property(x => x.Description)
+                .HasMaxLength(1000);
+
             builder.Property(x => x.ImagedUrl)
                 .HasMaxLength(500);
 
