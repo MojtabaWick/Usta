@@ -14,9 +14,8 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.Property(x => x.Price)
                 .HasPrecision(18, 0);
 
-            builder.HasMany(x => x.Images)
-                .WithOne(x => x.Offer)
-                .HasForeignKey(x => x.OfferId);
+            builder.Property(x => x.ImageUrl)
+                .HasMaxLength(500);
 
             builder.HasOne(x => x.Order)
                 .WithMany(x => x.Offers)

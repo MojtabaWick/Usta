@@ -10,14 +10,13 @@ namespace Usta.Domain.Core.OfferAgg.Entities
 
         public decimal Price { get; set; }
         public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime StartDateTime { get; set; }
         public bool IsAccepted { get; set; }
 
         #endregion Properties
 
         #region NavigationProperties
-
-        public List<OfferImage> Images { get; set; } = [];
 
         public int OrderId { get; set; }
         public Order Order { get; set; }

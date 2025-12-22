@@ -15,13 +15,13 @@ namespace Usta.Domain.Core.UserAgg.Entities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string? Address { get; set; }
+        public string? ImageUrl { get; set; }
         public decimal WalletBalance { get; set; } = 0;
 
         #endregion Properties
 
         #region NavigationProperties
 
-        public UserImage? Image { get; set; }
         public int? CityId { get; set; }
         public City? City { get; set; }
 

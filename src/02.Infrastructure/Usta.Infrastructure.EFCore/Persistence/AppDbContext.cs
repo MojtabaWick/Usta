@@ -15,16 +15,12 @@ namespace Usta.Infrastructure.EFCore.Persistence
     public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>(options)
     {
         public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<ProvidedService> ProvidedServices { get; set; }
-        public DbSet<ProvidedServiceImage> ProvidedServiceImages { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Offer> Offers { get; set; }
-        public DbSet<OfferImage> OfferImages { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderImage> OrderImages { get; set; }
-        public DbSet<UserImage> UserImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

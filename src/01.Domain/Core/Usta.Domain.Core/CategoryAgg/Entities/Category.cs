@@ -9,12 +9,11 @@ namespace Usta.Domain.Core.CategoryAgg.Entities
 
         public string Title { get; set; }
         public string? Description { get; set; }
+        public string ImagedUrl { get; set; }
 
         #endregion Properties
 
         #region NavigationProperties
-
-        public CategoryImage CategoryImage { get; set; }
 
         public List<ProvidedService> ProvidedServices { get; set; } = [];
 
