@@ -19,8 +19,6 @@
     <Folder Include="OrderAgg\Dtos\" />
     <Folder Include="ProvidedServiceAgg\Contracts\" />
     <Folder Include="ProvidedServiceAgg\Dtos\" />
-    <Folder Include="UserAgg\Contracts\" />
-    <Folder Include="UserAgg\Dtos\" />
   </ItemGroup>
 
   <ItemGroup>
