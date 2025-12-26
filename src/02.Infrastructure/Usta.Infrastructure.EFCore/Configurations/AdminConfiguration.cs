@@ -22,7 +22,7 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 EmailConfirmed = true,
                 FirstName = "Admin",
                 LastName = "User",
-                PasswordHash = "AQAAAAIAAYagAAAAEOpgiIBwXBRZ8dPKfqULmgOi2hE7QuVOJD5BwUngSme7QU0D20U34GcfNYDcIUYNfA==",
+                PasswordHash = "AQAAAAIAAYagAAAAEOpgiIBwXBRZ8dPKfqULmgOi2hE7QuVOJD5BwUngSme7QU0D20U34GcfNYDcIUYNfA==", //Admin@123
                 SecurityStamp = "STATIC-SECURITY-STAMP-ADMIN",
                 ConcurrencyStamp = "STATIC-CONCURRENCY-STAMP-ADMIN",
                 CreatedAt = new DateTime(2023, 1, 1, 0, 0, 0)
