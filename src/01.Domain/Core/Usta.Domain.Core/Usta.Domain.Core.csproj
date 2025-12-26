@@ -7,16 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CategoryAgg\Contracts\" />
-    <Folder Include="CategoryAgg\Dtos\" />
-    <Folder Include="CityAgg\Contracts\" />
-    <Folder Include="CityAgg\Dtos\" />
     <Folder Include="CommentAgg\Contracts\" />
     <Folder Include="CommentAgg\Dtos\" />
     <Folder Include="OfferAgg\Contracts\" />
     <Folder Include="OfferAgg\Dtos\" />
-    <Folder Include="OrderAgg\Contracts\" />
-    <Folder Include="OrderAgg\Dtos\" />
   </ItemGroup>
 
   <ItemGroup>

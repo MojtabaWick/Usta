@@ -4,7 +4,7 @@ using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Entities;
 using Usta.Infrastructure.EFCore.Persistence;
 
-namespace Usta.Infrastructure.EFCore.Repositories
+namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
 {
     public class ProvidedServiceRepository(AppDbContext dbContext) : IProvidedServiceRepository
     {
@@ -50,7 +50,7 @@ namespace Usta.Infrastructure.EFCore.Repositories
                 }).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<bool> UpdateProvidedService(ProvidedServiceDto input, CancellationToken cancellationToken)
+        public async Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken)
         {
             // image change will be handled in service.
 
