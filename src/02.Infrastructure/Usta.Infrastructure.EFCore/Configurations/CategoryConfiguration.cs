@@ -19,7 +19,7 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 .HasMaxLength(1000);
 
             builder.Property(x => x.ImagedUrl)
-                .HasMaxLength(500);
+                .HasMaxLength(1000);
 
             builder.HasMany(x => x.ProvidedServices)
                 .WithOne(x => x.Category)

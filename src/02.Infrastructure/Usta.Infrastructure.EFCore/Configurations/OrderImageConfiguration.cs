@@ -13,7 +13,7 @@ namespace Usta.Infrastructure.EFCore.Configurations
         {
             builder.Property(x => x.ImageUrl)
                 .IsRequired()
-                .HasMaxLength(500);
+                .HasMaxLength(1000);
 
             builder.HasOne(x => x.Order)
                 .WithMany(x => x.Images)

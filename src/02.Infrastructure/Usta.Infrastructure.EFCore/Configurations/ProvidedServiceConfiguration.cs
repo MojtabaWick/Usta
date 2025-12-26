@@ -22,7 +22,7 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 .HasPrecision(18, 0);
 
             builder.Property(x => x.ImageUrl)
-                .HasMaxLength(500);
+                .HasMaxLength(1000);
 
             builder.HasMany(x => x.Orders)
                 .WithOne(x => x.ProvidedService)
