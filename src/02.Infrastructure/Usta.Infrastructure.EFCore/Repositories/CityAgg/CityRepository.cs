@@ -19,7 +19,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.CityAgg
 
         public async Task<bool> Update(CityDto input, CancellationToken cancellationToken)
         {
-            var affectedRow = await dbContext.Cities.Where(c => c.Id == input.Id)
+            var affectedRow = await dbContext.Cities
+                .Where(c => c.Id == input.Id)
                 .ExecuteUpdateAsync(setter => setter
                     .SetProperty(c => c.Name, input.Name), cancellationToken);
 
@@ -28,17 +29,22 @@ namespace Usta.Infrastructure.EFCore.Repositories.CityAgg
 
         public async Task<CityDto?> GetById(int id, CancellationToken cancellationToken)
         {
-            return await dbContext.Cities.Where(c => c.Id == id).Select(c => new CityDto() { Id = c.Id, Name = c.Name })
+            return await dbContext.Cities
+                .AsNoTracking()
+                .Where(c => c.Id == id)
+                .Select(c => new CityDto() { Id = c.Id, Name = c.Name })
                  .FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<List<CityDto>> GetAllCity(CancellationToken cancellationToken)
         {
-            return await dbContext.Cities.Select(c => new CityDto()
-            {
-                Id = c.Id,
-                Name = c.Name,
-            }).ToListAsync(cancellationToken);
+            return await dbContext.Cities
+                .AsNoTracking()
+                .Select(c => new CityDto()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                }).ToListAsync(cancellationToken);
         }
     }
 }

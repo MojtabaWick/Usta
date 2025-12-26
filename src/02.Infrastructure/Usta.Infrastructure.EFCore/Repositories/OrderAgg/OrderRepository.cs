@@ -28,7 +28,9 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
 
         public async Task<OrderDto?> GetById(int id, CancellationToken cancellationToken)
         {
-            return await dbContext.Orders.Where(o => o.Id == id)
+            return await dbContext.Orders
+                .AsNoTracking()
+                .Where(o => o.Id == id)
                 .Select(o => new OrderDto()
                 {
                     Id = o.Id,
@@ -41,9 +43,23 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                 }).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<List<OrderDto>> GetAllOrders(CancellationToken cancellationToken)
+        public async Task<List<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
-            return await dbContext.Orders
+            var query = dbContext.Orders
+                .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(o =>
+                    o.ProvidedService.Title.Contains(search) ||
+                    o.ProvidedService.Description != null && o.ProvidedService.Description.Contains(search) ||
+                    o.Description.Contains(search));
+            }
+
+            return await query
+                .OrderBy(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(o => new OrderDto()
                 {
                     Id = o.Id,

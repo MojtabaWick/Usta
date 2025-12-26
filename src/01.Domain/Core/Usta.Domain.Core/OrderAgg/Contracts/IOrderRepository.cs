@@ -11,6 +11,6 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
 
         public Task<OrderDto?> GetById(int id, CancellationToken cancellationToken);
 
-        public Task<List<OrderDto>> GetAllOrders(CancellationToken cancellationToken);
+        public Task<List<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
     }
 }

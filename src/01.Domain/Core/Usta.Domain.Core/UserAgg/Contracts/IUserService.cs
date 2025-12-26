@@ -13,9 +13,9 @@ namespace Usta.Domain.Core.UserAgg.Contracts
 
         public Task<SignInResult> LoginUserAsync(string userName, string password);
 
-        public Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
+        public Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
 
-        public Task<List<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+        public Task<List<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
 
         public Task<bool> UpdateUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken);
     }

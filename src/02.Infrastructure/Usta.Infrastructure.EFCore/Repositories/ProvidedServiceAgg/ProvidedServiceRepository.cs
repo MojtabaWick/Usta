@@ -16,14 +16,25 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
             return await dbContext.SaveChangesAsync(cancellationToken) > 0;
         }
 
-        public async Task<List<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<List<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
-            return await dbContext.ProvidedServices
-                .AsNoTracking()
-                .OrderBy(u => u.Id)
+            var query = dbContext.ProvidedServices
+                .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(p =>
+                    p.Title.Contains(search) ||
+                    p.Description != null && p.Description.Contains(search) ||
+                    p.Category.Title.Contains(search)
+                );
+            }
+
+            return await query
+                .OrderBy(p => p.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new ProvidedServiceDto()
+                .Select(p => new ProvidedServiceDto
                 {
                     Id = p.Id,
                     Title = p.Title,
@@ -31,7 +42,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
                     CategoryName = p.Category.Title,
                     ImageUrl = p.ImageUrl,
                     MinPrice = p.MinPrice
-                }).ToListAsync(cancellationToken);
+                })
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<ProvidedServiceDto?> GetProvidedServiceById(int id, CancellationToken cancellationToken)

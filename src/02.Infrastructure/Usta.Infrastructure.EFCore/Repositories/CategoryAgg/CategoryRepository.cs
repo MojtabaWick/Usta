@@ -28,24 +28,29 @@ namespace Usta.Infrastructure.EFCore.Repositories.CategoryAgg
 
         public async Task<CategoryDto?> GetById(int id, CancellationToken cancellationToken)
         {
-            return await dbContext.Categories.Where(c => c.Id == id).Select(c => new CategoryDto()
-            {
-                Id = c.Id,
-                Title = c.Title,
-                ImagedUrl = c.ImagedUrl,
-                Description = c.Description,
-            }).FirstOrDefaultAsync(cancellationToken);
+            return await dbContext.Categories
+                .AsNoTracking()
+                .Where(c => c.Id == id)
+                .Select(c => new CategoryDto()
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    ImagedUrl = c.ImagedUrl,
+                    Description = c.Description,
+                }).FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<List<CategoryDto>> GetAllCategories(CancellationToken cancellationToken)
         {
-            return await dbContext.Categories.Select(c => new CategoryDto()
-            {
-                Id = c.Id,
-                Title = c.Title,
-                Description = c.Description,
-                ImagedUrl = c.ImagedUrl,
-            }).ToListAsync(cancellationToken);
+            return await dbContext.Categories
+                .AsNoTracking()
+                .Select(c => new CategoryDto()
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Description = c.Description,
+                    ImagedUrl = c.ImagedUrl,
+                }).ToListAsync(cancellationToken);
         }
     }
 }

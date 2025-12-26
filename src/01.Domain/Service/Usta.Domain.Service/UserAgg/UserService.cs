@@ -6,7 +6,7 @@ using Usta.Domain.Core.UserAgg.Entities;
 using Usta.Domain.Core.UserAgg.Enums;
 using Usta.Infrastructure.FileService.Contracts;
 
-namespace Usta.Domain.Service
+namespace Usta.Domain.Service.UserAgg
 {
     public class UserService : IUserService
     {
@@ -67,7 +67,7 @@ namespace Usta.Domain.Service
             return await _signInManager.PasswordSignInAsync(userName, password, false, false);
         }
 
-        public async Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
+        public async Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
         {
             return await _userManager.Users
                 .AsNoTracking()
@@ -83,31 +83,43 @@ namespace Usta.Domain.Service
                     PhoneNumber = u.PhoneNumber,
                     Address = u.Address,
                     ImageUrl = u.ImageUrl,
-                    CityName = u.City.Name
+                    CityName = u.City != null ? u.City.Name : null
                 }).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<List<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<List<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
-            return await _userManager.Users
-                .AsNoTracking()
-                .OrderBy(u => u.Id)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(u => new UserDto
-                {
-                    Id = u.Id,
-                    Email = u.Email!,
-                    IsActive = u.IsActive,
-                    WalletBalance = u.WalletBalance,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    PhoneNumber = u.PhoneNumber,
-                    Address = u.Address,
-                    ImageUrl = u.ImageUrl,
-                    CityName = u.City.Name
-                })
-                .ToListAsync(cancellationToken);
+            var query = _userManager.Users
+               .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(u =>
+                    (u.FirstName != null && u.FirstName.Contains(search)) ||
+                    (u.LastName != null && u.LastName.Contains(search)) ||
+                    (u.UserName != null && u.UserName.Contains(search)) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(search)) ||
+                    (u.City != null && u.City.Name.Contains(search)));
+            }
+
+            return await query
+           .OrderBy(u => u.Id)
+           .Skip((pageNumber - 1) * pageSize)
+           .Take(pageSize)
+           .Select(u => new UserDto
+           {
+               Id = u.Id,
+               Email = u.Email!,
+               IsActive = u.IsActive,
+               WalletBalance = u.WalletBalance,
+               FirstName = u.FirstName,
+               LastName = u.LastName,
+               PhoneNumber = u.PhoneNumber,
+               Address = u.Address,
+               ImageUrl = u.ImageUrl,
+               CityName = u.City.Name
+           })
+           .ToListAsync(cancellationToken);
         }
 
         public async Task<bool> UpdateUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken)
