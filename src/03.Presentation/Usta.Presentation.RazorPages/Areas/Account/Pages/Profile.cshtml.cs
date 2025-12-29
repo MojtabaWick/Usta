@@ -1,0 +1,22 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Usta.Domain.Core.UserAgg.Contracts;
+using Usta.Domain.Core.UserAgg.Dtos;
+using Usta.Presentation.RazorPages.Extentions;
+
+namespace Usta.Presentation.RazorPages.Areas.Account.Pages
+{
+    [Authorize]
+    public class ProfileModel(IUserAppService userAppService) : BasePageModel
+    {
+        public UserDto User { get; set; } = new();
+
+        public async Task<IActionResult> OnGetAsync(CancellationToken cancellationToken)
+        {
+            User = await userAppService.GetUserByIdAsync((int)GetUserId()!, cancellationToken);
+
+            return Page();
+        }
+    }
+}
