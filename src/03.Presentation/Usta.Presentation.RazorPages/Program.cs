@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Usta.Domain.Core.UserAgg.Entities;
 using Usta.Infrastructure.EFCore.Persistence;
 
@@ -7,6 +8,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+#region Logging
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+
+    //console log
+    .WriteTo.Console()
+    // Info ? Seq
+    .WriteTo.Logger(lc => lc
+        .WriteTo.Seq("http://localhost:5341"))
+
+    .CreateBootstrapLogger();
+
+builder.Host.UseSerilog();
+
+#endregion Logging
 
 #region RegisterService
 
