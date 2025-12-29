@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Dtos;

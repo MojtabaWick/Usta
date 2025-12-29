@@ -8,11 +8,11 @@ namespace Usta.Domain.Core.UserAgg.Contracts
     {
         public Task<IdentityResult> RegisterUserAsync(UserRegisterInputDto userDto, CancellationToken cancellationToken);
 
-        public Task<IdentityResult> LoginUserAsync(string userName, string password, CancellationToken cancellationToken);
+        public Task<SignInResult> LoginUserAsync(string userName, string password);
+
+        public Task Logout();
 
         public Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
-
-        public Task<List<UserDto>> GetAllUsersAsync(CancellationToken cancellationToken);
 
         public Task<Result<bool>> EditUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken);
     }

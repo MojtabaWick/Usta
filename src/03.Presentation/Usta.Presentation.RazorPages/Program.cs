@@ -1,8 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Usta.Domain.AppService.UserAgg;
+using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Entities;
+using Usta.Domain.Service.UserAgg;
+using Usta.Framework;
 using Usta.Infrastructure.EFCore.Persistence;
+using Usta.Infrastructure.FileService.Contracts;
+using Usta.Infrastructure.FileService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +43,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
         options.SignIn.RequireConfirmedPhoneNumber = false;
         options.User.RequireUniqueEmail = false;
         options.User.AllowedUserNameCharacters = "0123456789";
-
+        options.User.AllowedUserNameCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
         options.Password.RequireLowercase = false;
         options.Password.RequireUppercase = false;
         options.Lockout.MaxFailedAccessAttempts = 5;
@@ -46,6 +53,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
         options.Password.RequiredLength = 4;
         options.Password.RequireNonAlphanumeric = false;
     })
+    .AddErrorDescriber<PersianIdentityErrorDescriber>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -53,6 +61,10 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";          // وقتی لاگین نکرده
     options.AccessDeniedPath = "/Account/AccessDenied"; // وقتی نقش/پالیسی نداره
 });
+
+builder.Services.AddScoped<IUserAppService, UserAppService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 #endregion RegisterService
 

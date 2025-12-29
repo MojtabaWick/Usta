@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\00.Framewrok\Usta.Framework\Usta.Framework.csproj" />
+    <ProjectReference Include="..\..\Core\Usta.Domain.Core\Usta.Domain.Core.csproj" />
+  </ItemGroup>
+
 </Project>

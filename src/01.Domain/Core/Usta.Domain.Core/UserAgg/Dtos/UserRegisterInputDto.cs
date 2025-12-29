@@ -14,7 +14,7 @@ namespace Usta.Domain.Core.UserAgg.Dtos
         public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "رمز عبور الزامی است")]
-        [MinLength(8, ErrorMessage = "رمز عبور باید حداقل ۸ کاراکتر باشد")]
+        [MinLength(4, ErrorMessage = "رمز عبور باید حداقل 4 کاراکتر باشد")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = null!;
 
