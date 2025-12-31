@@ -29,7 +29,7 @@ namespace Usta.Presentation.RazorPages.Areas.Account.Pages
             {
                 if (User.HasClaim(ClaimTypes.Role, "Admin"))
                 {
-                    return RedirectToPage("Admin/Index");
+                    return RedirectToPage("/Index", new { area = "Admin" });
                 }
 
                 return RedirectToPage("Index");
