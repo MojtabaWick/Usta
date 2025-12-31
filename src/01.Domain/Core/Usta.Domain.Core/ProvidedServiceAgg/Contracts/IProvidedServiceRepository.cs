@@ -14,5 +14,7 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
         public Task<ProvidedServiceDto?> GetProvidedServiceById(int id, CancellationToken cancellationToken);
 
         public Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken);
+
+        public Task<List<ProvidedService>> GetByListIdsAsync(List<int> serviceIds, CancellationToken cancellationToken);
     }
 }

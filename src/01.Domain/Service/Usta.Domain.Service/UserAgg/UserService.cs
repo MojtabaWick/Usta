@@ -1,7 +1,9 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
+using Usta.Domain.Core.ProvidedServiceAgg.Entities;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Dtos;
 using Usta.Domain.Core.UserAgg.Entities;
@@ -15,12 +17,17 @@ namespace Usta.Domain.Service.UserAgg
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IFileService _fileService;
+        private readonly IProvidedServiceService _providedServiceService;
 
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IFileService fileService)
+        public UserService(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IFileService fileService,
+            IProvidedServiceService providedServiceService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _fileService = fileService;
+            _providedServiceService = providedServiceService;
         }
 
         public async Task<IdentityResult> RegisterUserAsync(UserRegisterInputDto userDto, CancellationToken cancellationToken)
@@ -183,6 +190,30 @@ namespace Usta.Domain.Service.UserAgg
                 );
 
             return affectedRows > 0;
+        }
+
+        public async Task<bool> UpdateExpertServices(
+            int userId,
+            List<int> newServiceIds,
+            CancellationToken cancellationToken)
+        {
+            var expert = await _userManager.Users
+                .OfType<Expert>()
+                .Include(e => e.ProvidedServices)
+                .FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
+
+            if (expert is null)
+                return false;
+
+            newServiceIds ??= [];
+
+            var services = await _providedServiceService.GetByListIdsAsync(newServiceIds, cancellationToken);
+
+            expert.ProvidedServices.Clear();
+            expert.ProvidedServices.AddRange(services);
+
+            await _userManager.UpdateAsync(expert);
+            return true;
         }
     }
 }

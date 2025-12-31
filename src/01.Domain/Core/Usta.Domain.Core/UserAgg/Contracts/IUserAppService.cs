@@ -12,10 +12,12 @@ namespace Usta.Domain.Core.UserAgg.Contracts
 
         public Task Logout();
 
-        public Task<UserDto?> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken);
+        public Task<UserDto> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken);
 
         public Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
 
         public Task<Result<bool>> EditUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken);
+
+        public Task<bool> UpdateExpertServices(int userId, List<int> newServiceIds, CancellationToken cancellationToken);
     }
 }

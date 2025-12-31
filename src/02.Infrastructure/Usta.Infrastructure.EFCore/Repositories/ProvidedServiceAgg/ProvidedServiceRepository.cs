@@ -89,5 +89,15 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
 
             return affected > 0;
         }
+
+        public async Task<List<ProvidedService>> GetByListIdsAsync(List<int> serviceIds, CancellationToken cancellationToken)
+        {
+            if (serviceIds is null || serviceIds.Count == 0)
+                return [];
+
+            return await dbContext.ProvidedServices
+                .Where(s => serviceIds.Contains(s.Id))
+                .ToListAsync(cancellationToken);
+        }
     }
 }

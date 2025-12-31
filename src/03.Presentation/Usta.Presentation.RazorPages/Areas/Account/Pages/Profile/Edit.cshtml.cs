@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Usta.Domain.Core.CityAgg.Contracts;
 using Usta.Domain.Core.CityAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
@@ -91,6 +90,15 @@ namespace Usta.Presentation.RazorPages.Areas.Account.Pages.Profile
             }
 
             var result = await _userAppService.EditUserAsync(id, Input, cancellationToken);
+
+            if (IsExpert())
+            {
+                var servicesUpdate = await _userAppService.UpdateExpertServices(id, Input.ServiceIds, cancellationToken);
+                if (!servicesUpdate)
+                {
+                    ModelState.AddModelError("", "آپدیت سرویس های کارشناس با مشکل مواجه شده است.");
+                }
+            }
 
             if (!result.IsSuccess)
             {

@@ -14,7 +14,18 @@ namespace Usta.Presentation.RazorPages.Areas.Account.Pages.Profile
 
         public async Task<IActionResult> OnGetAsync(CancellationToken cancellationToken)
         {
-            User = await userAppService.GetUserByIdAsync((int)GetUserId()!, cancellationToken);
+            int userId = (int)GetUserId()!;
+
+            if (IsExpert())
+            {
+                User = await userAppService
+                    .GetExpertUserWithServicesAsync(userId, cancellationToken);
+            }
+            else
+            {
+                User = await userAppService
+                    .GetUserByIdAsync(userId, cancellationToken);
+            }
 
             return Page();
         }

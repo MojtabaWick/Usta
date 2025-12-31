@@ -24,9 +24,11 @@ namespace Usta.Domain.AppService.UserAgg
             await signInManager.SignOutAsync();
         }
 
-        public async Task<UserDto?> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken)
+        public async Task<UserDto> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken)
         {
-            return await userService.GetExpertUserWithServicesAsync(userId, cancellationToken);
+            var userDto = await userService.GetExpertUserWithServicesAsync(userId, cancellationToken);
+
+            return userDto ?? throw new Exception($"user with id {userId} not found.");
         }
 
         public async Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
@@ -42,6 +44,11 @@ namespace Usta.Domain.AppService.UserAgg
 
             return update ? Result<bool>.Success("اطلاعات کاربر با موفقیت بروزرسانی شد.")
                 : Result<bool>.Failure("بروزرسانی اطلاعات کاربر با مشکل مواجه شده است.");
+        }
+
+        public async Task<bool> UpdateExpertServices(int userId, List<int> newServiceIds, CancellationToken cancellationToken)
+        {
+            return await userService.UpdateExpertServices(userId, newServiceIds, cancellationToken);
         }
     }
 }

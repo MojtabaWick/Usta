@@ -145,6 +145,35 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        @if (Model.IsExpert())
+                        {
+                            <div class="mt-5 text-start">
+                                <h5 class="mb-3 text-primary">
+                                    <i class="bi bi-tools me-2"></i>
+                                    سرویس‌های قابل ارائه
+                                </h5>
+
+                                @if (Model.User.Services.Any())
+                                {
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach (var service in Model.User.Services)
+                                        {
+                                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill shadow-sm">
+                                                @service.Title
+                                            </span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-muted small">
+                                        هنوز سرویسی ثبت نشده است
+                                    </p>
+                                }
+                            </div>
+                        }
+
                     </div>
 
                     <!-- دکمه ویرایش -->
