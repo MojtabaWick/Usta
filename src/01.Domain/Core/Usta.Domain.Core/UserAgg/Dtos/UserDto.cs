@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 
 namespace Usta.Domain.Core.UserAgg.Dtos
 {
@@ -17,5 +18,7 @@ namespace Usta.Domain.Core.UserAgg.Dtos
         public string? ImageUrl { get; set; }
         public string? CityName { get; set; }
         public int? CityId { get; set; } = 0;
+
+        public List<ProfileProvidedServiceDto> Services { get; set; } = [];
     }
 }

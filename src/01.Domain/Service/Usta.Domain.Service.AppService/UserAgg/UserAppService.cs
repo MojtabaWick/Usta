@@ -24,6 +24,11 @@ namespace Usta.Domain.AppService.UserAgg
             await signInManager.SignOutAsync();
         }
 
+        public async Task<UserDto?> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken)
+        {
+            return await userService.GetExpertUserWithServicesAsync(userId, cancellationToken);
+        }
+
         public async Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
         {
             var userDto = await userService.GetUserByIdAsync(userId, cancellationToken);

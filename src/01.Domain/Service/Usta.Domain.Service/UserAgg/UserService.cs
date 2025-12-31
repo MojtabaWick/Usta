@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Dtos;
 using Usta.Domain.Core.UserAgg.Entities;
@@ -87,6 +88,37 @@ namespace Usta.Domain.Service.UserAgg
                     CityId = u.CityId,
                     CityName = u.City != null ? u.City.Name : null
                 }).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<UserDto?> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken)
+        {
+            return await _userManager.Users
+                .OfType<Expert>()
+                .AsNoTracking()
+                .Where(u => u.Id == userId)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Email = u.Email!,
+                    IsActive = u.IsActive,
+                    WalletBalance = u.WalletBalance,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    PhoneNumber = u.PhoneNumber,
+                    Address = u.Address,
+                    ImageUrl = u.ImageUrl,
+                    CityId = u.CityId,
+                    CityName = u.City != null ? u.City.Name : null,
+
+                    Services = u.ProvidedServices
+                        .Select(ps => new ProfileProvidedServiceDto()
+                        {
+                            Id = ps.Id,
+                            Title = ps.Title
+                        })
+                        .ToList()
+                })
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<List<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)

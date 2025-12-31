@@ -16,6 +16,17 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
             return await dbContext.SaveChangesAsync(cancellationToken) > 0;
         }
 
+        public async Task<List<ProfileProvidedServiceDto>> GetAllForProfileAsync(CancellationToken cancellationToken)
+        {
+            return await dbContext.ProvidedServices
+                .AsNoTracking()
+                .Select(p => new ProfileProvidedServiceDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                }).ToListAsync(cancellationToken);
+        }
+
         public async Task<List<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.ProvidedServices

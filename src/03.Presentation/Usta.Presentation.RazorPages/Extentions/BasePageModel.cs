@@ -13,5 +13,11 @@ namespace Usta.Presentation.RazorPages.Extentions
                 return userId;
             return null;
         }
+
+        public bool IsExpert()
+        {
+            return User.Claims.Any(c =>
+                c.Type == ClaimTypes.Role && c.Value == "Expert");
+        }
     }
 }

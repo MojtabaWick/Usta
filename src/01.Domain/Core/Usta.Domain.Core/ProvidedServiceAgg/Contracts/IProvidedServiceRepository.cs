@@ -7,6 +7,8 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
     {
         public Task<bool> CreateProvidedService(ProvidedService input, CancellationToken cancellationToken);
 
+        Task<List<ProfileProvidedServiceDto>> GetAllForProfileAsync(CancellationToken cancellationToken);
+
         public Task<List<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
 
         public Task<ProvidedServiceDto?> GetProvidedServiceById(int id, CancellationToken cancellationToken);

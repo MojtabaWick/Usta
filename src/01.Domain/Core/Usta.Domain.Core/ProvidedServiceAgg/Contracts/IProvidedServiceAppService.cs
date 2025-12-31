@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
+
+namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
+{
+    public interface IProvidedServiceAppService
+    {
+        Task<List<ProfileProvidedServiceDto>> GetAllForProfileAsync(CancellationToken cancellationToken);
+    }
+}

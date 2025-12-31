@@ -12,5 +12,7 @@ namespace Usta.Domain.Core.UserAgg.Dtos
         public string? ImageUrl { get; set; }
         public IFormFile? ImageFile { get; set; }
         public int? CityId { get; set; }
+
+        public List<int> ServiceIds { get; set; } = [];
     }
 }
