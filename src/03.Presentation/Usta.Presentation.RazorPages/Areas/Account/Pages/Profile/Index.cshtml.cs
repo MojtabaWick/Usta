@@ -5,10 +5,10 @@ using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Dtos;
 using Usta.Presentation.RazorPages.Extentions;
 
-namespace Usta.Presentation.RazorPages.Areas.Account.Pages
+namespace Usta.Presentation.RazorPages.Areas.Account.Pages.Profile
 {
     [Authorize]
-    public class ProfileModel(IUserAppService userAppService) : BasePageModel
+    public class IndexModel(IUserAppService userAppService) : BasePageModel
     {
         public UserDto User { get; set; } = new();
 

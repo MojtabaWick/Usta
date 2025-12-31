@@ -12,6 +12,6 @@ namespace Usta.Domain.Core.CityAgg.Contracts
 
         public Task<CityDto?> GetById(int id, CancellationToken cancellationToken);
 
-        public Task<List<CityDto>> GetAllCity(CancellationToken cancellationToken);
+        public Task<List<CityDto>> GetAllCities(CancellationToken cancellationToken);
     }
 }

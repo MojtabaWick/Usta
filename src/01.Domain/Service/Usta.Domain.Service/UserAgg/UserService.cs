@@ -84,6 +84,7 @@ namespace Usta.Domain.Service.UserAgg
                     PhoneNumber = u.PhoneNumber,
                     Address = u.Address,
                     ImageUrl = u.ImageUrl,
+                    CityId = u.CityId,
                     CityName = u.City != null ? u.City.Name : null
                 }).FirstOrDefaultAsync(cancellationToken);
         }

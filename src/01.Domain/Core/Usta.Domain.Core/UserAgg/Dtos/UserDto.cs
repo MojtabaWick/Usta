@@ -16,5 +16,6 @@ namespace Usta.Domain.Core.UserAgg.Dtos
         public string? Address { get; set; }
         public string? ImageUrl { get; set; }
         public string? CityName { get; set; }
+        public int? CityId { get; set; } = 0;
     }
 }

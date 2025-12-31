@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Usta.Domain.AppService.CityAgg;
 using Usta.Domain.AppService.UserAgg;
+using Usta.Domain.Core.CityAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Entities;
+using Usta.Domain.Service.CityAgg;
 using Usta.Domain.Service.UserAgg;
 using Usta.Framework;
 using Usta.Infrastructure.EFCore.Persistence;
+using Usta.Infrastructure.EFCore.Repositories.CityAgg;
 using Usta.Infrastructure.FileService.Contracts;
 using Usta.Infrastructure.FileService.Services;
 
@@ -65,6 +69,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<IUserAppService, UserAppService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<ICityAppService, CityAppService>();
 
 #endregion RegisterService
 

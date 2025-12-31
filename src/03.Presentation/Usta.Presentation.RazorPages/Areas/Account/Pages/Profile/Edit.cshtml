@@ -1,0 +1,145 @@
+﻿@page "{id:int}"
+@model Usta.Presentation.RazorPages.Areas.Account.Pages.EditModel
+@{
+    ViewData["Title"] = "ویرایش پروفایل";
+
+    char GetInitial(string? str)
+        => string.IsNullOrWhiteSpace(str) ? 'م' : char.ToUpper(str.Trim()[0]);
+}
+
+<form method="post" enctype="multipart/form-data" class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+                <!-- هدر -->
+                <div class="bg-primary bg-gradient text-white p-4 text-center">
+                    <h4 class="mb-0">ویرایش پروفایل</h4>
+                    <small class="opacity-75">اطلاعات حساب کاربری</small>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- آواتار -->
+                    <div class="text-center mb-4">
+                        <div class="position-relative d-inline-block">
+
+                            <!-- عکس یا حروف -->
+                            <div id="avatarContainer"
+                                 class="rounded-circle shadow d-flex align-items-center justify-content-center"
+                                 style="width:140px;height:140px;overflow:hidden;background:#6c757d;">
+
+                                @if (!string.IsNullOrWhiteSpace(Model.Input.ImageUrl))
+                                {
+                                    <img id="avatarPreview"
+                                         src="@Model.Input.ImageUrl"
+                                         class="w-100 h-100 object-fit-cover" />
+                                }
+                                else
+                                {
+                                    <span id="avatarInitials"
+                                          class="text-white fw-bold fs-2">
+                                        @GetInitial(Model.Input.FirstName)@GetInitial(Model.Input.LastName)
+                                    </span>
+                                }
+                            </div>
+
+                            <!-- دکمه آپلود -->
+                            <label class="btn btn-sm btn-primary rounded-circle position-absolute bottom-0 end-0 shadow"
+                                   style="width:36px;height:36px;cursor:pointer;">
+                                <i class="bi bi-camera"></i>
+                                <input asp-for="Input.ImageFile"
+                                       type="file"
+                                       hidden
+                                       accept="image/*"
+                                       onchange="previewImage(this)" />
+                            </label>
+                        </div>
+
+                        <input type="hidden" asp-for="Input.ImageUrl" />
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label">ایمیل</label>
+                            <input asp-for="Input.Email" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">شماره تماس</label>
+                            <input asp-for="Input.PhoneNumber" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">نام</label>
+                            <input asp-for="Input.FirstName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">نام خانوادگی</label>
+                            <input asp-for="Input.LastName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">شهر</label>
+                            <select class="form-select" name="Input.CityId">
+                                <option value="">انتخاب شهر</option>
+
+                                @foreach (var city in Model.Cities)
+                                {
+                                    <option value="@city.Id"
+                                            selected="@(city.Id == Model.Input.CityId)">
+                                        @city.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">آدرس</label>
+                            <textarea asp-for="Input.Address"
+                                      rows="3"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-5">
+                        <a asp-page="/Profile/Index"
+                           class="btn btn-outline-secondary rounded-pill px-4">
+                            بازگشت
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-primary rounded-pill px-5 shadow">
+                            ذخیره تغییرات
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        function previewImage(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const container = document.getElementById("avatarContainer");
+
+                container.innerHTML =
+                    `<img id="avatarPreview"
+                          src="${e.target.result}"
+                          class="w-100 h-100 object-fit-cover" />`;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    </script>
+}

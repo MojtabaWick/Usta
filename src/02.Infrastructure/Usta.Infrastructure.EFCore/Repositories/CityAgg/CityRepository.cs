@@ -36,7 +36,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.CityAgg
                  .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<List<CityDto>> GetAllCity(CancellationToken cancellationToken)
+        public async Task<List<CityDto>> GetAllCities(CancellationToken cancellationToken)
         {
             return await dbContext.Cities
                 .AsNoTracking()
