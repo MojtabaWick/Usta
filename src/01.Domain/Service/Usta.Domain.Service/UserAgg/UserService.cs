@@ -73,7 +73,7 @@ namespace Usta.Domain.Service.UserAgg
 
         public async Task<SignInResult> LoginUserAsync(string userName, string password)
         {
-            return await _signInManager.PasswordSignInAsync(userName, password, false, false);
+            return await _signInManager.PasswordSignInAsync(userName, password, true, false);
         }
 
         public async Task<IdentityResult> ChangePasswordWithAdmin(int userId, string newPassword)

@@ -85,7 +85,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";          // وقتی لاگین نکرده
+    options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied"; // وقتی نقش/پالیسی نداره
+
+    options.ExpireTimeSpan = TimeSpan.FromDays(7); // ⭐ ماندگاری لاگین
+    options.SlidingExpiration = true;               // تمدید خودکار
+    options.Cookie.HttpOnly = true; //امنیت در برابر جاوا اسکریپت
+    options.Cookie.IsEssential = true;// بدون رضایت قبول کردن کوکی میتوان کوکی ذخیره کرد
 });
 
 builder.Services.AddScoped<IUserAppService, UserAppService>();
