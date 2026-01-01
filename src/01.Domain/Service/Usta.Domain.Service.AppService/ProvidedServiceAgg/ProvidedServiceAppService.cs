@@ -32,9 +32,37 @@ namespace Usta.Domain.AppService.ProvidedServiceAgg
             return result;
         }
 
+        public async Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken)
+        {
+            var pSEditDto = await providedServiceService.GetProvidedServiceByIdForEdit(id, cancellationToken);
+
+            if (pSEditDto is null)
+            {
+                _logger.LogError($"provide service with id:{id} not found.");
+            }
+
+            return pSEditDto;
+        }
+
         public async Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken)
         {
-            return await providedServiceService.Create(input, cancellationToken);
+            var result = await providedServiceService.Create(input, cancellationToken);
+            if (result)
+            {
+                _logger.LogInformation($"new provided service with title:{input.Title} created.");
+            }
+            return result;
+        }
+
+        public async Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken)
+        {
+            var result = await providedServiceService.UpdateProvidedService(input, cancellationToken);
+            if (result)
+            {
+                _logger.LogInformation($"provided service with id:{input.Id} updated.");
+            }
+
+            return result;
         }
     }
 }

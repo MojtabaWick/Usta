@@ -21,7 +21,7 @@ namespace Usta.Presentation.RazorPages.Areas.Admin.Pages.Categories
         public async Task<IActionResult> OnGetAsync(int id, CancellationToken cancellationToken)
         {
             Category = await _categoryService.GetForEditAsync(id, cancellationToken);
-            if (Category == null)
+            if (Category is null)
             {
                 return NotFound();
             }

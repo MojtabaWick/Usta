@@ -68,17 +68,17 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
             };
         }
 
-        public async Task<ProvidedServiceDto?> GetProvidedServiceById(int id, CancellationToken cancellationToken)
+        public async Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken)
         {
             return await dbContext.ProvidedServices
                 .AsNoTracking()
-                .Select(p => new ProvidedServiceDto()
+                .Where(p => p.Id == id)
+                .Select(p => new ProvidedServiceEditDto()
                 {
                     Id = p.Id,
                     Title = p.Title,
                     Description = p.Description,
                     CategoryId = p.CategoryId,
-                    CategoryName = p.Category.Title,
                     ImageUrl = p.ImageUrl,
                     MinPrice = p.MinPrice
                 }).FirstOrDefaultAsync(cancellationToken);

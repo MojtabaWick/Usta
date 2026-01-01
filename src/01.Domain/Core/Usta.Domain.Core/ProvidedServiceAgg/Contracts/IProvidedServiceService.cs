@@ -9,15 +9,19 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
 {
     public interface IProvidedServiceService
     {
-        public Task<List<ProfileProvidedServiceDto>> GetAllForProfileAsync(CancellationToken cancellationToken);
+        Task<List<ProfileProvidedServiceDto>> GetAllForProfileAsync(CancellationToken cancellationToken);
 
-        public Task<List<ProvidedService>> GetByListIdsAsync(List<int> serviceIds, CancellationToken cancellationToken);
+        Task<List<ProvidedService>> GetByListIdsAsync(List<int> serviceIds, CancellationToken cancellationToken);
 
-        public Task<PagedResult<ProvidedServiceDto>> GetAllForAdmin(int pageNumber, int pageSize, string? search,
+        Task<PagedResult<ProvidedServiceDto>> GetAllForAdmin(int pageNumber, int pageSize, string? search,
             CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
 
+        Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken);
+
         Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken);
+
+        Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken);
     }
 }

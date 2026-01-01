@@ -15,6 +15,10 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
 
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
 
+        Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken);
+
         Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken);
+
+        Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken);
     }
 }

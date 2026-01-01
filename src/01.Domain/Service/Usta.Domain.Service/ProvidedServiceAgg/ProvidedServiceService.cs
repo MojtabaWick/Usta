@@ -34,6 +34,11 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
             return await providedServiceRepository.DeleteAsync(id, cancellationToken);
         }
 
+        public async Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken)
+        {
+            return await providedServiceRepository.GetProvidedServiceByIdForEdit(id, cancellationToken);
+        }
+
         public async Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken)
         {
             if (input.ImageFile is not null)
@@ -51,6 +56,20 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
             };
 
             return await providedServiceRepository.CreateProvidedService(newProvidedService, cancellationToken);
+        }
+
+        public async Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken)
+        {
+            if (input.ImaFile is not null)
+            {
+                if (input.ImageUrl is not null)
+                {
+                    await _fileService.DeleteByUrlAsync(input.ImageUrl, cancellationToken);
+                }
+
+                input.ImageUrl = await _fileService.Upload(input.ImaFile, PicFolder, cancellationToken);
+            }
+            return await providedServiceRepository.UpdateProvidedService(input, cancellationToken);
         }
     }
 }

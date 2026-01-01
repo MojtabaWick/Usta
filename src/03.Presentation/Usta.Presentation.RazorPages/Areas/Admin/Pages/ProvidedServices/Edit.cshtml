@@ -1,0 +1,111 @@
+﻿@page "{id:int}"
+@model Usta.Presentation.RazorPages.Areas.Admin.Pages.ProvidedServices.EditModel
+
+@{
+    ViewData["Title"] = "ویرایش سرویس";
+}
+
+<h2 class="mb-4">ویرایش سرویس</h2>
+
+<form method="post" enctype="multipart/form-data" class="card shadow-sm p-4">
+
+    <!-- hidden id -->
+    <input type="hidden" asp-for="ProvidedServiceEditDto.Id" />
+    <input type="hidden" asp-for="ProvidedServiceEditDto.ImageUrl" />
+    <!-- عنوان -->
+    <div class="mb-3">
+        <label asp-for="ProvidedServiceEditDto.Title" class="form-label"></label>
+        <input asp-for="ProvidedServiceEditDto.Title" class="form-control" />
+        <span asp-validation-for="ProvidedServiceEditDto.Title" class="text-danger"></span>
+    </div>
+
+    <!-- توضیحات -->
+    <div class="mb-3">
+        <label asp-for="ProvidedServiceEditDto.Description" class="form-label"></label>
+        <textarea asp-for="ProvidedServiceEditDto.Description"
+                  class="form-control"
+                  rows="4"></textarea>
+        <span asp-validation-for="ProvidedServiceEditDto.Description" class="text-danger"></span>
+    </div>
+
+    <!-- حداقل قیمت -->
+    <div class="mb-3">
+        <label asp-for="ProvidedServiceEditDto.MinPrice" class="form-label"></label>
+        <input asp-for="ProvidedServiceEditDto.MinPrice"
+               type="number"
+               step="0.01"
+               class="form-control" />
+        <span asp-validation-for="ProvidedServiceEditDto.MinPrice" class="text-danger"></span>
+    </div>
+
+    <!-- دسته بندی -->
+    <div class="mb-3">
+        <label asp-for="ProvidedServiceEditDto.CategoryId" class="form-label"></label>
+        <select asp-for="ProvidedServiceEditDto.CategoryId"
+                class="form-select">
+            <option value="">-- انتخاب دسته‌بندی --</option>
+
+            @foreach (var category in Model.CategorySelect)
+            {
+                <option value="@category.Id"
+                        selected="@(category.Id == Model.ProvidedServiceEditDto.CategoryId)">
+                    @category.Title
+                </option>
+            }
+        </select>
+        <span asp-validation-for="ProvidedServiceEditDto.CategoryId" class="text-danger"></span>
+    </div>
+
+    <!-- تصویر فعلی -->
+    @if (!string.IsNullOrEmpty(Model.ProvidedServiceEditDto.ImageUrl))
+    {
+        <div class="mb-3">
+            <label class="form-label">تصویر فعلی</label><br />
+            <img src="@Model.ProvidedServiceEditDto.ImageUrl"
+                 class="img-thumbnail"
+                 style="max-width:200px" />
+        </div>
+    }
+
+    <!-- تصویر جدید -->
+    <div class="mb-3">
+        <label asp-for="ProvidedServiceEditDto.ImaFile" class="form-label">
+            تغییر تصویر
+        </label>
+        <input asp-for="ProvidedServiceEditDto.ImaFile"
+               type="file"
+               class="form-control"
+               accept="image/*"
+               onchange="previewImage(event)" />
+        <span asp-validation-for="ProvidedServiceEditDto.ImaFile" class="text-danger"></span>
+    </div>
+
+    <!-- پیش نمایش تصویر جدید -->
+    <div class="mb-3">
+        <img id="imagePreview"
+             style="max-width:200px; display:none; border-radius:8px"
+             class="border" />
+    </div>
+
+    <!-- دکمه ها -->
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-warning">
+            💾 ذخیره تغییرات
+        </button>
+        <a asp-page="Index" class="btn btn-secondary">
+            بازگشت
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function previewImage(event) {
+            const img = document.getElementById('imagePreview');
+            img.src = URL.createObjectURL(event.target.files[0]);
+            img.style.display = 'block';
+        }
+    </script>
+}
