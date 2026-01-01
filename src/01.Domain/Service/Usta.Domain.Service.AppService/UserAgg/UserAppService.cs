@@ -19,6 +19,16 @@ namespace Usta.Domain.AppService.UserAgg
             return await userService.LoginUserAsync(userName, password);
         }
 
+        public async Task<IdentityResult> ChangePasswordWithAdmin(int userId, string password)
+        {
+            return await userService.ChangePasswordWithAdmin(userId, password);
+        }
+
+        public async Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword)
+        {
+            return await userService.ChangePasswordWithUser(userId, oldPassword, newPassword);
+        }
+
         public async Task Logout()
         {
             await signInManager.SignOutAsync();

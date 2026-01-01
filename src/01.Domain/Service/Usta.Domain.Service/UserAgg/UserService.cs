@@ -76,6 +76,39 @@ namespace Usta.Domain.Service.UserAgg
             return await _signInManager.PasswordSignInAsync(userName, password, false, false);
         }
 
+        public async Task<IdentityResult> ChangePasswordWithAdmin(int userId, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user is null)
+            {
+                throw new Exception($"user with id:{userId} not found. ");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            return result;
+        }
+
+        public async Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found" });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+            }
+            return result;
+        }
+
         public async Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
         {
             return await _userManager.Users
@@ -192,10 +225,7 @@ namespace Usta.Domain.Service.UserAgg
             return affectedRows > 0;
         }
 
-        public async Task<bool> UpdateExpertServices(
-            int userId,
-            List<int> newServiceIds,
-            CancellationToken cancellationToken)
+        public async Task<bool> UpdateExpertServices(int userId, List<int> newServiceIds, CancellationToken cancellationToken)
         {
             var expert = await _userManager.Users
                 .OfType<Expert>()

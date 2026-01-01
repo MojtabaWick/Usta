@@ -10,6 +10,10 @@ namespace Usta.Domain.Core.UserAgg.Contracts
 
         public Task<SignInResult> LoginUserAsync(string userName, string password);
 
+        public Task<IdentityResult> ChangePasswordWithAdmin(int userId, string password);
+
+        public Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword);
+
         public Task Logout();
 
         public Task<UserDto> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken);
