@@ -14,6 +14,5 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Dtos
         public string? ImageUrl { get; set; }
         public IFormFile? ImaFile { get; set; }
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace Usta.Domain.Core.CategoryAgg.Contracts
 
         Task<CategoryEditDto> GetForEditAsync(int id, CancellationToken cancellationToken);
 
+        Task<List<CategorySelectDto>> GetCategoriesForSelect(CancellationToken cancellationToken);
+
         Task<bool> UpdateAsync(CategoryEditDto input, CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);

@@ -14,6 +14,8 @@ namespace Usta.Domain.Core.CategoryAgg.Contracts
 
         public Task<List<CategoryDto>> GetAllCategories(CancellationToken cancellationToken);
 
+        public Task<List<CategorySelectDto>> GetCategoriesForSelect(CancellationToken cancellationToken);
+
         public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

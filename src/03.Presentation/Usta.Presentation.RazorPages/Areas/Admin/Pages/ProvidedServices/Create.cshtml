@@ -1,0 +1,92 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Admin.Pages.ProvidedServices.CreateModel
+@{
+    ViewData["Title"] = "ایجاد سرویس جدید";
+}
+
+<h2 class="mb-4">ایجاد سرویس جدید</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    <!-- عنوان -->
+    <div class="form-group mb-3">
+        <label asp-for="Service.Title" class="form-label"></label>
+        <input asp-for="Service.Title" class="form-control" />
+        <span asp-validation-for="Service.Title" class="text-danger"></span>
+    </div>
+
+    <!-- توضیحات -->
+    <div class="form-group mb-3">
+        <label asp-for="Service.Description" class="form-label"></label>
+        <textarea asp-for="Service.Description"
+                  class="form-control"
+                  rows="4"></textarea>
+        <span asp-validation-for="Service.Description" class="text-danger"></span>
+    </div>
+
+    <!-- حداقل قیمت -->
+    <div class="form-group mb-3">
+        <label asp-for="Service.MinPrice" class="form-label"></label>
+        <input asp-for="Service.MinPrice"
+               type="number"
+               class="form-control" />
+        <span asp-validation-for="Service.MinPrice" class="text-danger"></span>
+    </div>
+
+    <!-- انتخاب دسته‌بندی -->
+    <div class="form-group mb-3">
+        <label asp-for="Service.CategoryId" class="form-label"></label>
+
+        <select asp-for="Service.CategoryId" class="form-select">
+            <option value="">-- انتخاب دسته‌بندی --</option>
+
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">
+                    @category.Title
+                </option>
+            }
+        </select>
+
+        <span asp-validation-for="Service.CategoryId" class="text-danger"></span>
+    </div>
+
+
+    <!-- تصویر -->
+    <div class="form-group mb-3">
+        <label asp-for="Service.ImageFile" class="form-label">
+            تصویر سرویس
+        </label>
+        <input asp-for="Service.ImageFile"
+               type="file"
+               class="form-control"
+               accept="image/*"
+               onchange="previewImage(event)" />
+        <span asp-validation-for="Service.ImageFile" class="text-danger"></span>
+    </div>
+
+    <!-- پیش‌نمایش تصویر -->
+    <div class="mb-3">
+        <img id="imagePreview"
+             src="/images/no-image.png"
+             style="max-width: 200px; display: none; border-radius: 8px;"
+             class="border" />
+    </div>
+
+    <!-- دکمه‌ها -->
+    <button type="submit" class="btn btn-success">ثبت</button>
+    <a asp-page="Index" class="btn btn-secondary">انصراف</a>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function previewImage(event) {
+            const img = document.getElementById('imagePreview');
+            img.src = URL.createObjectURL(event.target.files[0]);
+            img.style.display = 'block';
+        }
+    </script>
+}

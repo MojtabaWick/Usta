@@ -54,6 +54,17 @@ namespace Usta.Infrastructure.EFCore.Repositories.CategoryAgg
                 }).ToListAsync(cancellationToken);
         }
 
+        public async Task<List<CategorySelectDto>> GetCategoriesForSelect(CancellationToken cancellationToken)
+        {
+            return await dbContext.Categories
+                .AsNoTracking()
+                .Select(c => new CategorySelectDto()
+                {
+                    Id = c.Id,
+                    Title = c.Title
+                }).ToListAsync(cancellationToken);
+        }
+
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var affectedRow = await dbContext.Categories

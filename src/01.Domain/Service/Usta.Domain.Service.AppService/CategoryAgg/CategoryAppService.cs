@@ -30,6 +30,11 @@ namespace Usta.Domain.AppService.CategoryAgg
             return await categoryService.GetForEditAsync(id, cancellationToken);
         }
 
+        public async Task<List<CategorySelectDto>> GetCategoriesForSelect(CancellationToken cancellationToken)
+        {
+            return await categoryService.GetCategoriesForSelect(cancellationToken);
+        }
+
         public async Task<bool> UpdateAsync(CategoryEditDto input, CancellationToken cancellationToken)
         {
             var result = await categoryService.UpdateAsync(input, cancellationToken);

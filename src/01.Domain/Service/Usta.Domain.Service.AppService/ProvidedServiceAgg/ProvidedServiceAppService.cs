@@ -31,5 +31,10 @@ namespace Usta.Domain.AppService.ProvidedServiceAgg
 
             return result;
         }
+
+        public async Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken)
+        {
+            return await providedServiceService.Create(input, cancellationToken);
+        }
     }
 }

@@ -52,6 +52,11 @@ namespace Usta.Domain.Service.CategoryAgg
             return categoryEditDto;
         }
 
+        public async Task<List<CategorySelectDto>> GetCategoriesForSelect(CancellationToken cancellationToken)
+        {
+            return await categoryRepo.GetCategoriesForSelect(cancellationToken);
+        }
+
         public async Task<bool> UpdateAsync(CategoryEditDto input, CancellationToken cancellationToken)
         {
             if (input.ImageFile is not null)

@@ -17,5 +17,7 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
             CancellationToken cancellationToken);
 
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
+
+        Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken);
     }
 }
