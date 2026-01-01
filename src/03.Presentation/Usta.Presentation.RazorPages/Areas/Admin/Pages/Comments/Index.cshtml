@@ -1,0 +1,108 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Admin.Pages.Comments.IndexModel
+
+@{
+    ViewData["Title"] = "مدیریت نظرات";
+}
+
+<h2 class="mb-4">لیست نظرات کاربران</h2>
+
+<table class="table table-bordered table-hover align-middle text-center">
+    <thead class="table-dark">
+    <tr>
+        <th>شناسه</th>
+        <th>متن نظر</th>
+        <th>امتیاز</th>
+        <th>وضعیت</th>
+        <th style="width:180px">عملیات</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.Comments.Items.Any())
+    {
+        foreach (var comment in Model.Comments.Items)
+        {
+            <tr>
+                <td>@comment.Id</td>
+                <td class="text-start">@comment.Text</td>
+                <td>⭐ @comment.Rating</td>
+                <td>
+                    @if (comment.IsApproved)
+                    {
+                        <span class="badge bg-success">تأیید شده</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">در انتظار تأیید</span>
+                    }
+                </td>
+                <td>
+                    @if (comment.IsApproved)
+                    {
+                        <form method="post"
+                              asp-page-handler="Reject"
+                              asp-route-id="@comment.Id"
+                              asp-route-PageNumber="@Model.PageNumber"
+                              style="display:inline;">
+                            <button class="btn btn-sm btn-danger">
+                                ❌ رد کردن
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post"
+                              asp-page-handler="Approve"
+                              asp-route-id="@comment.Id"
+                              asp-route-PageNumber="@Model.PageNumber"
+                              style="display:inline;">
+                            <button class="btn btn-sm btn-success">
+                                ✔ تأیید کردن
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">نظری وجود ندارد</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.Comments.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)">
+                    قبلی
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.Comments.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-route-PageNumber="@i">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.Comments.TotalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)">
+                    بعدی
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}
+

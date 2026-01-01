@@ -3,21 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Usta.Domain.AppService.CategoryAgg;
 using Usta.Domain.AppService.CityAgg;
+using Usta.Domain.AppService.CommentAgg;
 using Usta.Domain.AppService.ProvidedServiceAgg;
 using Usta.Domain.AppService.UserAgg;
 using Usta.Domain.Core.CategoryAgg.Contracts;
 using Usta.Domain.Core.CityAgg.Contracts;
+using Usta.Domain.Core.CommentAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Entities;
 using Usta.Domain.Service.CategoryAgg;
 using Usta.Domain.Service.CityAgg;
+using Usta.Domain.Service.CommentAgg;
 using Usta.Domain.Service.ProvidedServiceAgg;
 using Usta.Domain.Service.UserAgg;
 using Usta.Framework;
 using Usta.Infrastructure.EFCore.Persistence;
 using Usta.Infrastructure.EFCore.Repositories.CategoryAgg;
 using Usta.Infrastructure.EFCore.Repositories.CityAgg;
+using Usta.Infrastructure.EFCore.Repositories.CommentAgg;
 using Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg;
 using Usta.Infrastructure.FileService.Contracts;
 using Usta.Infrastructure.FileService.Services;
@@ -100,6 +104,10 @@ builder.Services.AddScoped<IProvidedServiceAppService, ProvidedServiceAppService
 builder.Services.AddScoped<ICategoryAppService, CategoryAppService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICommentAppService, CommentAppService>();
 
 #endregion RegisterService
 

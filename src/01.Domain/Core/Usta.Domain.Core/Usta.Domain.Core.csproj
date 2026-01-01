@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CommentAgg\Contracts\" />
-    <Folder Include="CommentAgg\Dtos\" />
     <Folder Include="OfferAgg\Contracts\" />
     <Folder Include="OfferAgg\Dtos\" />
   </ItemGroup>
