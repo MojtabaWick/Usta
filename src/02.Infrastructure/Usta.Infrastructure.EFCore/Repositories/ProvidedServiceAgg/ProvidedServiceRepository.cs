@@ -84,7 +84,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
                     .SetProperty(p => p.Description, input.Description)
                     .SetProperty(p => p.CategoryId, input.CategoryId)
                     .SetProperty(p => p.ImageUrl, input.ImageUrl)
-                    .SetProperty(p => p.MinPrice, input.MinPrice),
+                    .SetProperty(p => p.MinPrice, input.MinPrice)
+                    .SetProperty(c => c.UpdatedAt, DateTime.Now),
                 cancellationToken);
 
             return affected > 0;

@@ -22,7 +22,9 @@ namespace Usta.Infrastructure.EFCore.Repositories.CityAgg
             var affectedRow = await dbContext.Cities
                 .Where(c => c.Id == input.Id)
                 .ExecuteUpdateAsync(setter => setter
-                    .SetProperty(c => c.Name, input.Name), cancellationToken);
+                    .SetProperty(c => c.Name, input.Name)
+                    .SetProperty(c => c.UpdatedAt, DateTime.Now)
+                    , cancellationToken);
 
             return affectedRow > 0;
         }

@@ -22,7 +22,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
             var affected = await dbContext.Orders.Where(o => o.Id == input.Id)
                 .ExecuteUpdateAsync(setter => setter
                     .SetProperty(o => o.Description, input.Description)
-                    .SetProperty(o => o.StartDateTime, input.StartDateTime), cancellationToken);
+                    .SetProperty(o => o.StartDateTime, input.StartDateTime)
+                    .SetProperty(c => c.UpdatedAt, DateTime.Now), cancellationToken);
             return affected > 0;
         }
 

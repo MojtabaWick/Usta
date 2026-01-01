@@ -21,6 +21,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.CategoryAgg
                         .SetProperty(c => c.Title, input.Title)
                         .SetProperty(c => c.Description, input.Description)
                         .SetProperty(c => c.ImagedUrl, input.ImagedUrl)
+                        .SetProperty(c => c.UpdatedAt, DateTime.Now)
                     , cancellationToken);
 
             return affectedRow > 0;
@@ -58,7 +59,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.CategoryAgg
             var affectedRow = await dbContext.Categories
                 .Where(c => c.Id == id)
                 .ExecuteUpdateAsync(setter => setter
-                    .SetProperty(c => c.IsDeleted, true), cancellationToken);
+                    .SetProperty(c => c.IsDeleted, true)
+                    .SetProperty(c => c.DeletedAt, DateTime.Now), cancellationToken);
 
             return affectedRow > 0;
         }
