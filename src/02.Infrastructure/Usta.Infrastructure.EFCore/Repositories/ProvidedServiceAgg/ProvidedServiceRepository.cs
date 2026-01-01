@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core._common;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Entities;
@@ -27,7 +28,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
                 }).ToListAsync(cancellationToken);
         }
 
-        public async Task<List<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.ProvidedServices
                 .AsNoTracking();
@@ -41,7 +42,9 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
                 );
             }
 
-            return await query
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
                 .OrderBy(p => p.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -55,6 +58,14 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
                     MinPrice = p.MinPrice
                 })
                 .ToListAsync(cancellationToken);
+
+            return new PagedResult<ProvidedServiceDto>()
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<ProvidedServiceDto?> GetProvidedServiceById(int id, CancellationToken cancellationToken)
@@ -99,6 +110,15 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
             return await dbContext.ProvidedServices
                 .Where(s => serviceIds.Contains(s.Id))
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            var affectedRow = await dbContext.ProvidedServices.Where(ps => ps.Id == id)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(ps => ps.IsDeleted, true)
+                    .SetProperty(ps => ps.DeletedAt, DateTime.Now), cancellationToken);
+            return affectedRow > 0;
         }
     }
 }
