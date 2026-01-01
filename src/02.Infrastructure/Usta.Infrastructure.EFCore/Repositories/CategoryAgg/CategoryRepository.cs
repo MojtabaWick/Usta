@@ -52,5 +52,15 @@ namespace Usta.Infrastructure.EFCore.Repositories.CategoryAgg
                     ImagedUrl = c.ImagedUrl,
                 }).ToListAsync(cancellationToken);
         }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            var affectedRow = await dbContext.Categories
+                .Where(c => c.Id == id)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(c => c.IsDeleted, true), cancellationToken);
+
+            return affectedRow > 0;
+        }
     }
 }

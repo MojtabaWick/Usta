@@ -13,5 +13,7 @@ namespace Usta.Domain.Core.CategoryAgg.Contracts
         public Task<CategoryDto?> GetById(int id, CancellationToken cancellationToken);
 
         public Task<List<CategoryDto>> GetAllCategories(CancellationToken cancellationToken);
+
+        public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

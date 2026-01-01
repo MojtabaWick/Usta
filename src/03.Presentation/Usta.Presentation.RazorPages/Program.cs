@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Usta.Domain.AppService.CategoryAgg;
 using Usta.Domain.AppService.CityAgg;
 using Usta.Domain.AppService.ProvidedServiceAgg;
 using Usta.Domain.AppService.UserAgg;
+using Usta.Domain.Core.CategoryAgg.Contracts;
 using Usta.Domain.Core.CityAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Entities;
+using Usta.Domain.Service.CategoryAgg;
 using Usta.Domain.Service.CityAgg;
 using Usta.Domain.Service.ProvidedServiceAgg;
 using Usta.Domain.Service.UserAgg;
 using Usta.Framework;
 using Usta.Infrastructure.EFCore.Persistence;
+using Usta.Infrastructure.EFCore.Repositories.CategoryAgg;
 using Usta.Infrastructure.EFCore.Repositories.CityAgg;
 using Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg;
 using Usta.Infrastructure.FileService.Contracts;
@@ -82,13 +86,20 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<IUserAppService, UserAppService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<IFileService, FileService>();
+
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ICityAppService, CityAppService>();
+
 builder.Services.AddScoped<IProvidedServiceRepository, ProvidedServiceRepository>();
 builder.Services.AddScoped<IProvidedServiceService, ProvidedServiceService>();
 builder.Services.AddScoped<IProvidedServiceAppService, ProvidedServiceAppService>();
+
+builder.Services.AddScoped<ICategoryAppService, CategoryAppService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 #endregion RegisterService
 

@@ -1,0 +1,78 @@
+﻿@page
+@using Usta.Presentation.RazorPages.Areas.Admin.Pages.Categories
+@model IndexModel
+
+@{
+    ViewData["Title"] = "دسته بندی‌ها";
+}
+
+<h2 class="mb-4">لیست دسته بندی‌ها</h2>
+
+<a asp-page="Create" class="btn btn-success mb-3">
+    ➕ افزودن دسته بندی جدید
+</a>
+
+<table class="table table-bordered table-hover align-middle text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>شناسه</th>
+            <th>تصویر</th>
+            <th>عنوان</th>
+            <th>توضیحات</th>
+            <th style="width:180px">عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Categories.Any())
+        {
+            foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Id</td>
+
+                    <td>
+                        <img src="@category.ImagedUrl"
+                             alt="Category Image"
+                             style="width:60px;height:60px;object-fit:cover;border-radius:8px"
+                             class="border" />
+                    </td>
+
+                    <td>@category.Title</td>
+
+                    <td>
+                        @(string.IsNullOrWhiteSpace(category.Description)
+                                        ? "—"
+                                        : category.Description)
+                    </td>
+
+                    <td>
+                        <a asp-page="Edit"
+                           asp-route-id="@category.Id"
+                           class="btn btn-sm btn-warning">
+                            ✏ ویرایش
+                        </a>
+
+                        <form method="post"
+                              asp-page-handler="Delete"
+                              asp-route-id="@category.Id"
+                              style="display:inline;">
+                            <button type="submit"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('آیا از حذف این دسته بندی مطمئن هستید؟');">
+                                🗑 حذف
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-muted">
+                    هیچ دسته بندی‌ای ثبت نشده است
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
