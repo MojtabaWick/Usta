@@ -33,6 +33,7 @@
             <th>شناسه</th>
             <th>عنوان</th>
             <th>دسته‌بندی</th>
+            <th>توضیحات</th>
             <th>حداقل قیمت</th>
             <th>تصویر</th>
             <th style="width:180px">عملیات</th>
@@ -45,8 +46,13 @@
             {
                 <tr>
                     <td>@item.Id</td>
-                    <td class="text-start">@item.Title</td>
+                    <td>@item.Title</td>
                     <td>@item.CategoryName</td>
+                    <td>
+                        @(string.IsNullOrWhiteSpace(item.Description)
+                            ? "—"
+                            : item.Description)
+                    </td>
                     <td>@item.MinPrice.ToString("N0")</td>
                     <td>
                         @if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -58,6 +64,7 @@
                             <span class="text-muted">—</span>
                         }
                     </td>
+
                     <td>
                         <a asp-page="Edit"
                            asp-route-id="@item.Id"

@@ -31,11 +31,15 @@
                     <td>@category.Id</td>
 
                     <td>
-                        <img src="@category.ImagedUrl"
-                             alt="Category Image"
-                             style="width:60px;height:60px;object-fit:cover;border-radius:8px"
-                             class="border" />
-                    </td>
+                        @if (!string.IsNullOrEmpty(category.ImagedUrl))
+                        {
+                            <img src="@category.ImagedUrl" width="60" class="rounded" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+            </td>
 
                     <td>@category.Title</td>
 
