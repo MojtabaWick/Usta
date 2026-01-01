@@ -20,6 +20,8 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.Property(x => x.ImageUrl)
                 .HasMaxLength(1000);
 
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.HasOne(x => x.Order)
                 .WithMany(x => x.Offers)
                 .HasForeignKey(x => x.OrderId)

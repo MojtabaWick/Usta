@@ -21,6 +21,8 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.Property(x => x.MinPrice)
                 .HasPrecision(18, 0);
 
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.Property(x => x.ImageUrl)
                 .HasMaxLength(1000);
 

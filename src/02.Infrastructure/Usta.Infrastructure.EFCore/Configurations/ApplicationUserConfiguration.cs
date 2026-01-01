@@ -24,6 +24,8 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.Property(x => x.ImageUrl)
                 .HasMaxLength(1000);
 
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.HasOne(x => x.City)
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.CityId)

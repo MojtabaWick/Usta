@@ -34,7 +34,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasIndex("ProvidedServicesId");
 
-                    b.ToTable("ExpertProvidedService");
+                    b.ToTable("ExpertProvidedService", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -239,7 +239,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -319,7 +319,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
 
                     b.HasData(
                         new
@@ -531,7 +531,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Usta.Domain.Core.OfferAgg.Entities.Offer", b =>
@@ -587,7 +587,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Offers");
+                    b.ToTable("Offers", (string)null);
                 });
 
             modelBuilder.Entity("Usta.Domain.Core.OrderAgg.Entities.Order", b =>
@@ -646,7 +646,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasIndex("ProvidedServiceId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Usta.Domain.Core.OrderAgg.Entities.OrderImage", b =>
@@ -684,7 +684,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderImages");
+                    b.ToTable("OrderImages", (string)null);
                 });
 
             modelBuilder.Entity("Usta.Domain.Core.ProvidedServiceAgg.Entities.ProvidedService", b =>
@@ -734,7 +734,7 @@ namespace Usta.Infrastructure.EFCore.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ProvidedServices");
+                    b.ToTable("ProvidedServices", (string)null);
 
                     b.HasData(
                         new

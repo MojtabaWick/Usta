@@ -20,6 +20,8 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.HasOne(x => x.Customer)
                 .WithMany(x => x.Orders)
                 .HasForeignKey(x => x.CustomerId)

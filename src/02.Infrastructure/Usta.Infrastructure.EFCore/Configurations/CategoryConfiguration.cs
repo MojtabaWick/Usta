@@ -25,6 +25,8 @@ namespace Usta.Infrastructure.EFCore.Configurations
                 .WithOne(x => x.Category)
                 .HasForeignKey(x => x.CategoryId);
 
+            builder.HasQueryFilter(x => !x.IsDeleted);
+
             builder.HasData(
                 new Category { Id = 1, Title = "لوازم خانگی", ImagedUrl = "/Image/Categories/kitchen.png" },
                 new Category { Id = 2, Title = "ساختمان", ImagedUrl = "/Image/Categories/building.png" },
