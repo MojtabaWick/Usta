@@ -28,11 +28,11 @@ namespace Usta.Infrastructure.EFCore.Configurations
             builder.HasQueryFilter(x => !x.IsDeleted);
 
             builder.HasData(
-                new Category { Id = 1, Title = "لوازم خانگی", ImagedUrl = "/Image/Categories/kitchen.png" },
-                new Category { Id = 2, Title = "ساختمان", ImagedUrl = "/Image/Categories/building.png" },
-                new Category { Id = 3, Title = "موبایل و تبلت", ImagedUrl = "/Image/Categories/mobile.png" },
-                new Category { Id = 4, Title = "خودرو", ImagedUrl = "/Image/Categories/car.png" },
-                new Category { Id = 5, Title = "کامپیوتر و لپ‌تاپ", ImagedUrl = "/Image/Categories/laptop.png" }
+                new Category { Id = 1, Title = "لوازم خانگی", ImagedUrl = "/Image/Categories/kitchen.jpg" },
+                new Category { Id = 2, Title = "ساختمان", ImagedUrl = "/Image/Categories/building.jpg" },
+                new Category { Id = 3, Title = "موبایل و تبلت", ImagedUrl = "/Image/Categories/mobile.jpg" },
+                new Category { Id = 4, Title = "خودرو", ImagedUrl = "/Image/Categories/car.jpg" },
+                new Category { Id = 5, Title = "کامپیوتر و لپ‌تاپ", ImagedUrl = "/Image/Categories/laptop.jpg" }
             );
         }
     }
