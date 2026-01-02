@@ -291,6 +291,7 @@ namespace Usta.Domain.Service.UserAgg
                 CityId = user.CityId,
                 Address = user.Address,
                 IsActive = user.IsActive,
+                WalletBalance = user.WalletBalance,
                 Role = role ?? "User"
             };
 
@@ -334,6 +335,7 @@ namespace Usta.Domain.Service.UserAgg
             user.CityId = input.CityId;
             user.Address = input.Address;
             user.IsActive = input.IsActive;
+            user.WalletBalance = input.WalletBalance;
 
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)

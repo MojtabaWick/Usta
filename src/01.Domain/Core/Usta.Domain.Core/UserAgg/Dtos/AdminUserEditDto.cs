@@ -9,6 +9,7 @@ namespace Usta.Domain.Core.UserAgg.Dtos
         public int Id { get; set; }
 
         public string Email { get; set; } = null!;
+        public decimal WalletBalance { get; set; }
         public string? PhoneNumber { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
