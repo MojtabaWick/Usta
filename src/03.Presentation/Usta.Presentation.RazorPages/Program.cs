@@ -80,7 +80,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
         options.Password.RequireNonAlphanumeric = false;
     })
     .AddErrorDescriber<PersianIdentityErrorDescriber>()
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

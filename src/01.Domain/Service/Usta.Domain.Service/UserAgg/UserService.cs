@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core._common;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Entities;
@@ -38,12 +39,14 @@ namespace Usta.Domain.Service.UserAgg
                 {
                     UserName = userDto.Email,
                     Email = userDto.Email,
+                    WalletBalance = 10000
                 },
 
                 RegisterRole.Expert => new Expert
                 {
                     UserName = userDto.Email,
                     Email = userDto.Email,
+                    WalletBalance = 10000
                 },
 
                 _ => throw new Exception("Invalid user role")
@@ -161,7 +164,7 @@ namespace Usta.Domain.Service.UserAgg
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<List<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = _userManager.Users
                .AsNoTracking();
@@ -176,7 +179,7 @@ namespace Usta.Domain.Service.UserAgg
                     (u.City != null && u.City.Name.Contains(search)));
             }
 
-            return await query
+            var items = await query
            .OrderBy(u => u.Id)
            .Skip((pageNumber - 1) * pageSize)
            .Take(pageSize)
@@ -194,35 +197,55 @@ namespace Usta.Domain.Service.UserAgg
                CityName = u.City.Name
            })
            .ToListAsync(cancellationToken);
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            return new PagedResult<UserDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<bool> UpdateUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken)
         {
             if (userDto.ImageFile is not null)
             {
-                if (userDto.ImageUrl is not null)
+                if (!string.IsNullOrWhiteSpace(userDto.ImageUrl))
                 {
                     await _fileService.DeleteByUrlAsync(userDto.ImageUrl, cancellationToken);
                 }
 
-                userDto.ImageUrl = await _fileService.Upload(userDto.ImageFile, "UsersProfile", cancellationToken);
+                userDto.ImageUrl = await _fileService.Upload(
+                    userDto.ImageFile, "UsersProfile", cancellationToken);
             }
 
-            var affectedRows = await _userManager.Users
-                .Where(u => u.Id == userId)
-                .ExecuteUpdateAsync(setters => setters
-                        .SetProperty(u => u.Email, userDto.Email)
-                        .SetProperty(u => u.NormalizedEmail, userDto.Email.ToUpper())
-                        .SetProperty(u => u.FirstName, userDto.FirstName)
-                        .SetProperty(u => u.LastName, userDto.LastName)
-                        .SetProperty(u => u.PhoneNumber, userDto.PhoneNumber)
-                        .SetProperty(u => u.Address, userDto.Address)
-                        .SetProperty(u => u.ImageUrl, userDto.ImageUrl)
-                        .SetProperty(u => u.CityId, userDto.CityId),
-                    cancellationToken
-                );
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return false;
 
-            return affectedRows > 0;
+            if (user.Email != userDto.Email)
+            {
+                await _userManager.SetEmailAsync(user, userDto.Email);
+                await _userManager.SetUserNameAsync(user, userDto.Email);
+            }
+
+            if (user.PhoneNumber != userDto.PhoneNumber)
+            {
+                await _userManager.SetPhoneNumberAsync(user, userDto.PhoneNumber);
+            }
+
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            user.Address = userDto.Address;
+            user.CityId = userDto.CityId;
+            user.ImageUrl = userDto.ImageUrl;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded;
         }
 
         public async Task<bool> UpdateExpertServices(int userId, List<int> newServiceIds, CancellationToken cancellationToken)
@@ -244,6 +267,94 @@ namespace Usta.Domain.Service.UserAgg
 
             await _userManager.UpdateAsync(expert);
             return true;
+        }
+
+        public async Task<AdminUserEditDto> GetUserForAdminEditAsync(int userId, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.Users
+                .AsNoTracking()
+                .Include(u => u.City)
+                .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+            if (user is null)
+                throw new Exception($"user with id: {userId} not found.");
+
+            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+
+            var dto = new AdminUserEditDto
+            {
+                Id = user.Id,
+                Email = user.Email!,
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                CityId = user.CityId,
+                Address = user.Address,
+                IsActive = user.IsActive,
+                Role = role ?? "User"
+            };
+
+            if (role == "Expert")
+            {
+                dto.ServiceIds = await GetServiceIdsByUserId(userId, cancellationToken);
+            }
+
+            return dto;
+        }
+
+        public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            var affectedRow = await _userManager.Users.Where(u => u.Id == id)
+                .ExecuteUpdateAsync(setter => setter
+                        .SetProperty(u => u.IsDeleted, true)
+                    , cancellationToken);
+
+            return affectedRow > 0;
+        }
+
+        public async Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return Result<bool>.Failure("کاربر یافت نشد");
+
+            if (user.Email != input.Email)
+            {
+                await _userManager.SetEmailAsync(user, input.Email);
+                await _userManager.SetUserNameAsync(user, input.Email);
+            }
+
+            if (user.PhoneNumber != input.PhoneNumber)
+            {
+                await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber);
+            }
+
+            user.FirstName = input.FirstName;
+            user.LastName = input.LastName;
+            user.CityId = input.CityId;
+            user.Address = input.Address;
+            user.IsActive = input.IsActive;
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                return Result<bool>.Failure("خطا در بروزرسانی کاربر");
+
+            if (input.Role == "Expert")
+            {
+                await UpdateExpertServices(userId, input.ServiceIds, cancellationToken);
+            }
+
+            return Result<bool>.Success("کاربر با موفقیت بروزرسانی شد.");
+        }
+
+        private async Task<List<int>> GetServiceIdsByUserId(int userId, CancellationToken cancellationToken)
+        {
+            return await _userManager.Users
+                .OfType<Expert>()
+                .AsNoTracking()
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.ProvidedServices.Select(ps => ps.Id))
+                .ToListAsync(cancellationToken);
         }
     }
 }

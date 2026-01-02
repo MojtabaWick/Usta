@@ -1,0 +1,106 @@
+﻿@page "{id:int}"
+@model Usta.Presentation.RazorPages.Areas.Admin.Pages.Users.EditModel
+
+@{
+    ViewData["Title"] = "ویرایش کاربر";
+}
+
+<h2 class="mb-4">ویرایش اطلاعات کاربر</h2>
+
+<form method="post" class="container">
+
+    <input type="hidden" asp-for="Input.Role" />
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+            <label class="form-label">ایمیل</label>
+            <input asp-for="Input.Email" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">شماره تماس</label>
+            <input asp-for="Input.PhoneNumber" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">نام</label>
+            <input asp-for="Input.FirstName" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">نام خانوادگی</label>
+            <input asp-for="Input.LastName" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">شهر</label>
+            <select asp-for="Input.CityId" class="form-select">
+                <option value="">انتخاب شهر</option>
+                @foreach (var city in Model.Cities)
+                {
+                    <option value="@city.Id">@city.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">وضعیت</label>
+            <select asp-for="Input.IsActive" class="form-select">
+                <option value="true">فعال</option>
+                <option value="false">غیرفعال</option>
+            </select>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">آدرس</label>
+            <textarea asp-for="Input.Address" rows="3" class="form-control"></textarea>
+        </div>
+
+        @if (Model.Input.Role == "Expert")
+        {
+            <div class="col-12">
+                <label class="form-label">سرویس‌های کارشناس</label>
+                <select asp-for="Input.ServiceIds"
+                        class="form-select select2"
+                        multiple>
+                    @foreach (var service in Model.Services)
+                    {
+                        <option value="@service.Id">@service.Title</option>
+                    }
+                </select>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-between mt-5">
+        <a asp-page="/Users/Index" asp-area="Admin"
+           class="btn btn-outline-secondary">
+            بازگشت
+        </a>
+
+        <button type="submit" class="btn btn-primary px-5">
+            ذخیره تغییرات
+        </button>
+    </div>
+
+</form>
+
+@section Scripts {
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(function () {
+            $('.select2').select2({
+                placeholder: "انتخاب سرویس‌ها",
+                width: '100%',
+                dir: "rtl"
+            });
+        });
+    </script>
+}

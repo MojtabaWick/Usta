@@ -42,32 +42,11 @@ namespace Usta.Presentation.RazorPages.Areas.Account.Pages.Profile
             {
                 await LoadServicesAsync(cancellationToken);
 
-                var user = await _userAppService.GetExpertUserWithServicesAsync(id, cancellationToken);
-                Input = new UserEditInputDto
-                {
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                    Address = user.Address,
-                    ImageUrl = user.ImageUrl,
-                    CityId = user.CityId,
-                    ServiceIds = user.Services.Select(s => s.Id).ToList()
-                };
+                Input = await _userAppService.GetExpertUserWithServicesForEdit(id, cancellationToken);
             }
             else
             {
-                var user = await _userAppService.GetUserByIdAsync(id, cancellationToken);
-                Input = new UserEditInputDto
-                {
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                    Address = user.Address,
-                    ImageUrl = user.ImageUrl,
-                    CityId = user.CityId,
-                };
+                Input = await _userAppService.GetUserByIdForEdit(id, cancellationToken);
             }
             await LoadCitiesAsync(cancellationToken);
 
