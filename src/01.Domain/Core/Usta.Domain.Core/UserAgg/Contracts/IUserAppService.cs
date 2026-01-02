@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.UserAgg.Dtos;
+using Usta.Domain.Core.UserAgg.Enums;
 
 namespace Usta.Domain.Core.UserAgg.Contracts
 {
@@ -15,7 +16,7 @@ namespace Usta.Domain.Core.UserAgg.Contracts
         public Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword);
 
         public Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search,
-            CancellationToken cancellationToken);
+            UserType? userType, CancellationToken cancellationToken);
 
         public Task Logout();
 

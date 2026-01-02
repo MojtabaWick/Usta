@@ -1,4 +1,5 @@
 ﻿@page
+@using Usta.Domain.Core.UserAgg.Enums
 @model Usta.Presentation.RazorPages.Areas.Admin.Pages.Users.IndexModel
 @{
     ViewData["Title"] = "مدیریت کاربران";
@@ -8,15 +9,29 @@
 
 <!-- سرچ -->
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <form method="get" class="d-flex">
+    <form method="get" class="d-flex align-items-center gap-2">
+
         <input type="text"
                name="Search"
                value="@Model.Search"
-               class="form-control me-2"
-               placeholder="جستجو نام، ایمیل یا شماره تماس..." />
+               class="form-control"
+               placeholder="جستجو..." />
+
+        <select name="UserType" class="form-select">
+            <option value="">همه کاربران</option>
+            <option value="Expert" selected="@(Model.UserType == UserType.Expert)">
+                کارشناس
+            </option>
+            <option value="Customer" selected="@(Model.UserType == UserType.Customer)">
+                مشتری
+            </option>
+            <option value="Admin" selected="@(Model.UserType == UserType.Admin)">
+                ادمین
+            </option>
+        </select>
 
         <button type="submit" class="btn btn-primary">
-            🔍 جستجو
+            🔍
         </button>
     </form>
     

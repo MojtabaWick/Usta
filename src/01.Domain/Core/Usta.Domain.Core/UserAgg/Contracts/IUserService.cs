@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.UserAgg.Dtos;
+using Usta.Domain.Core.UserAgg.Enums;
 
 namespace Usta.Domain.Core.UserAgg.Contracts
 {
@@ -20,7 +21,7 @@ namespace Usta.Domain.Core.UserAgg.Contracts
         public Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
 
         public Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search,
-            CancellationToken cancellationToken);
+            UserType? userType, CancellationToken cancellationToken);
 
         public Task<bool> UpdateUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken);
 

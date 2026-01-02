@@ -164,10 +164,20 @@ namespace Usta.Domain.Service.UserAgg
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, UserType? userType, CancellationToken cancellationToken)
         {
-            var query = _userManager.Users
-               .AsNoTracking();
+            var query = _userManager.Users.AsNoTracking();
+
+            if (userType.HasValue)
+            {
+                query = userType.Value switch
+                {
+                    UserType.Expert => query.OfType<Expert>(),
+                    UserType.Customer => query.OfType<Customer>(),
+                    UserType.Admin => query.OfType<Admin>(),
+                    _ => query
+                };
+            }
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -179,26 +189,26 @@ namespace Usta.Domain.Service.UserAgg
                     (u.City != null && u.City.Name.Contains(search)));
             }
 
-            var items = await query
-           .OrderBy(u => u.Id)
-           .Skip((pageNumber - 1) * pageSize)
-           .Take(pageSize)
-           .Select(u => new UserDto
-           {
-               Id = u.Id,
-               Email = u.Email!,
-               IsActive = u.IsActive,
-               WalletBalance = u.WalletBalance,
-               FirstName = u.FirstName,
-               LastName = u.LastName,
-               PhoneNumber = u.PhoneNumber,
-               Address = u.Address,
-               ImageUrl = u.ImageUrl,
-               CityName = u.City.Name
-           })
-           .ToListAsync(cancellationToken);
-
             var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .OrderBy(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Email = u.Email!,
+                    IsActive = u.IsActive,
+                    WalletBalance = u.WalletBalance,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    PhoneNumber = u.PhoneNumber,
+                    Address = u.Address,
+                    ImageUrl = u.ImageUrl,
+                    CityName = u.City != null ? u.City.Name : null
+                })
+                .ToListAsync(cancellationToken);
 
             return new PagedResult<UserDto>
             {

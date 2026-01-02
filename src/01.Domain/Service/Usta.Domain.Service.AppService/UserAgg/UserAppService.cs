@@ -1,10 +1,11 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using System.Security.Cryptography.X509Certificates;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Dtos;
 using Usta.Domain.Core.UserAgg.Entities;
+using Usta.Domain.Core.UserAgg.Enums;
 
 namespace Usta.Domain.AppService.UserAgg
 {
@@ -30,9 +31,9 @@ namespace Usta.Domain.AppService.UserAgg
             return await userService.ChangePasswordWithUser(userId, oldPassword, newPassword);
         }
 
-        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, UserType? userType, CancellationToken cancellationToken)
         {
-            return await userService.GetAllUsersAsync(pageNumber, pageSize, search, cancellationToken);
+            return await userService.GetAllUsersAsync(pageNumber, pageSize, search, userType, cancellationToken);
         }
 
         public async Task Logout()
