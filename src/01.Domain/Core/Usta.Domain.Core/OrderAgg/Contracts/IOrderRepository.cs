@@ -1,4 +1,5 @@
-﻿using Usta.Domain.Core.OrderAgg.Dtos;
+﻿using Usta.Domain.Core._common;
+using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Entities;
 
 namespace Usta.Domain.Core.OrderAgg.Contracts
@@ -11,6 +12,6 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
 
         public Task<OrderDto?> GetById(int id, CancellationToken cancellationToken);
 
-        public Task<List<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
+        public Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
     }
 }

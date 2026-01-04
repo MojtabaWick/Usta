@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core._common;
+using Usta.Domain.Core.CommentAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Contracts;
 using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Entities;
@@ -9,7 +11,7 @@ using Usta.Infrastructure.EFCore.Persistence;
 
 namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
 {
-    internal class OrderRepository(AppDbContext dbContext) : IOrderRepository
+    public class OrderRepository(AppDbContext dbContext) : IOrderRepository
     {
         public async Task<bool> Add(Order newOrder, CancellationToken cancellationToken)
         {
@@ -44,7 +46,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                 }).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<List<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.Orders
                 .AsNoTracking();
@@ -53,24 +55,34 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
             {
                 query = query.Where(o =>
                     o.ProvidedService.Title.Contains(search) ||
-                    o.ProvidedService.Description != null && o.ProvidedService.Description.Contains(search) ||
+                    (o.ProvidedService.Description != null && o.ProvidedService.Description.Contains(search)) ||
                     o.Description.Contains(search));
             }
 
-            return await query
-                .OrderBy(u => u.Id)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(o => new OrderDto()
-                {
-                    Id = o.Id,
-                    Description = o.Description,
-                    Images = o.Images,
-                    Status = o.Status,
-                    StartDateTime = o.StartDateTime,
-                    EndDateTime = o.EndDateTime,
-                    OffersCount = o.Offers.Count,
-                }).ToListAsync(cancellationToken);
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                 .OrderByDescending(u => u.Id)
+                 .Skip((pageNumber - 1) * pageSize)
+                 .Take(pageSize)
+                 .Select(o => new OrderDto()
+                 {
+                     Id = o.Id,
+                     Description = o.Description,
+                     Images = o.Images,
+                     Status = o.Status,
+                     StartDateTime = o.StartDateTime,
+                     EndDateTime = o.EndDateTime,
+                     OffersCount = o.Offers.Count,
+                 }).ToListAsync(cancellationToken);
+
+            return new PagedResult<OrderDto>
+            {
+                Items = items,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
         }
     }
 }
