@@ -18,6 +18,7 @@ namespace Usta.Domain.Core.UserAgg.Dtos
         public string? ImageUrl { get; set; }
         public string? CityName { get; set; }
         public int? CityId { get; set; } = 0;
+        public string UserType { get; set; } = string.Empty;
 
         public List<ProfileProvidedServiceDto> Services { get; set; } = [];
     }

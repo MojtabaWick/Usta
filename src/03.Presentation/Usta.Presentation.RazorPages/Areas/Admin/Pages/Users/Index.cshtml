@@ -45,6 +45,7 @@
     <thead class="table-dark">
         <tr>
             <th>شناسه</th>
+            <th>نوع کاربر</th>
             <th>تصویر</th>
             <th>نام</th>
             <th>نام خانوادگی</th>
@@ -63,6 +64,22 @@
             {
                 <tr>
                     <td>@user.Id</td>
+                    
+                    <td>@switch (user.UserType)
+                        {
+                            case "Admin":
+                                <span>ادمین</span>
+                                break;
+                            case "Expert":
+                                <span>کارشناس</span>
+                                break;
+                            case "Customer":
+                                <span>مشتری</span>
+                                break;
+                            case "User":
+                                <span>کاربر</span>
+                                break;
+                        } </td>
 
                     <td>
                         @if (!string.IsNullOrEmpty(user.ImageUrl))

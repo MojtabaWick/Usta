@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Diagnostics;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Usta.Domain.Core._common;
@@ -206,7 +207,10 @@ namespace Usta.Domain.Service.UserAgg
                     PhoneNumber = u.PhoneNumber,
                     Address = u.Address,
                     ImageUrl = u.ImageUrl,
-                    CityName = u.City != null ? u.City.Name : null
+                    CityName = u.City != null ? u.City.Name : null,
+                    UserType = u is Admin ? "Admin" :
+                                u is Expert ? "Expert" :
+                                u is Customer ? "Customer" : "User"
                 })
                 .ToListAsync(cancellationToken);
 
