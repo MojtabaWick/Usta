@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
 
 namespace Usta.Framework
 {
-    public static class PersianCalender
+    public static class PersianCalendarExtensions
     {
         private static readonly PersianCalendar Pc = new PersianCalendar();
 
-        /// <summary>
-        /// تبدیل تاریخ شمسی (مثل 1403/11/30 یا ۱۴۰۳-۱۱-۳۰) به DateOnly میلادی
-        /// با پشتیبانی از اعداد فارسی و انگلیسی
-        /// </summary>
-        public static DateOnly ToGregorianDateOnly(this string persianDate)
+        public static DateTime ToGregorianDateTime(this string persianDate)
         {
             if (string.IsNullOrWhiteSpace(persianDate))
                 throw new ArgumentException("تاریخ شمسی نمی‌تواند خالی باشد.");
 
-            // تبدیل اعداد فارسی به انگلیسی (حتی اگر کاربر دستی تایپ کرده باشه)
+            // تبدیل اعداد فارسی به انگلیسی
             persianDate = persianDate
                 .Replace("۰", "0").Replace("۱", "1").Replace("۲", "2")
                 .Replace("۳", "3").Replace("۴", "4").Replace("۵", "5")
@@ -37,14 +30,16 @@ namespace Usta.Framework
                 !int.TryParse(parts[2], out int day))
                 throw new FormatException("سال، ماه یا روز معتبر نیست.");
 
-            // چک کردن محدوده معتبر تاریخ شمسی
-            if (year < 1300 || year > 1500 || month < 1 || month > 12 || day < 1 || day > 31)
+            // اعتبارسنجی بازه شمسی
+            if (year < 1300 || year > 1500 ||
+                month < 1 || month > 12 ||
+                day < 1 || day > 31)
                 throw new ArgumentOutOfRangeException("تاریخ شمسی خارج از محدوده معتبر است.");
 
             try
             {
-                // مستقیم از DateOnly و PersianCalendar استفاده می‌کنیم (بهترین روش در .NET 6+)
-                return new DateOnly(year, month, day, Pc);
+                // تبدیل دقیق شمسی به میلادی
+                return Pc.ToDateTime(year, month, day, 0, 0, 0, 0);
             }
             catch (Exception ex)
             {
@@ -52,14 +47,14 @@ namespace Usta.Framework
             }
         }
 
-        public static string ToPersianDate(this DateOnly date)
+        /// <summary>
+        /// تبدیل DateTime میلادی به تاریخ شمسی (YYYY/MM/DD)
+        /// </summary>
+        public static string ToPersianDate(this DateTime dateTime)
         {
-            var pc = new PersianCalendar();
-            var dt = date.ToDateTime(TimeOnly.MinValue);
-
-            int year = pc.GetYear(dt);
-            int month = pc.GetMonth(dt);
-            int day = pc.GetDayOfMonth(dt);
+            int year = Pc.GetYear(dateTime);
+            int month = Pc.GetMonth(dateTime);
+            int day = Pc.GetDayOfMonth(dateTime);
 
             return $"{year:0000}/{month:00}/{day:00}";
         }
