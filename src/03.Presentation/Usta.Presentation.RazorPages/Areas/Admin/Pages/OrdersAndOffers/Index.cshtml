@@ -21,6 +21,8 @@
     <tr>
         <th>شناسه</th>
         <th>توضیح</th>
+        <th>تاریخ شروع</th>
+        <th>تاریخ پایان</th>
         <th>وضعیت</th>
         <th>تعداد پیشنهاد</th>
         <th>عملیات</th>
@@ -32,8 +34,10 @@
         <tr>
             <td>@order.Id</td>
             <td>@order.Description</td>
+            <td>@order.StartShamsiDate</td>
+            <td>@order.EndShamsiDate</td>
             <td>
-                <span class="badge bg-info">
+                <span class="text-black">
                     @order.Status.ToDisplayString()
                 </span>
             </td>

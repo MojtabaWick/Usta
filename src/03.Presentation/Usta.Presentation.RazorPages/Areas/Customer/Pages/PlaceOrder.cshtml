@@ -1,0 +1,88 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Customer.Pages.PlaceOrderModel
+@{
+    ViewData["Title"] = "ثبت سفارش";
+}
+
+<link rel="stylesheet" href="~/lib/PersianDatePicker/persian-datepicker.min.css" />
+
+<div class="container my-5">
+    <div class="card shadow-lg p-4 rounded-4">
+
+        <h4 class="mb-4 fw-bold text-center">ثبت درخواست خدمات</h4>
+
+        <div class="alert alert-info text-center mb-4">
+            شما در حال ثبت سفارش برای سرویس
+            <strong>@Model.ProvidedService!.Title</strong>
+            هستید
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form method="post" enctype="multipart/form-data">
+
+            <input type="hidden" asp-for="Input.ProvidedServiceId" />
+
+            <div class="mb-3">
+                <label class="form-label">توضیحات</label>
+                <textarea asp-for="Input.Description"
+                          class="form-control"
+                          rows="4"></textarea>
+                <span asp-validation-for="Input.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">تاریخ شروع (شمسی)</label>
+                <input asp-for="Input.StartDate"
+                       class="form-control"
+                       id="persianDate"
+                       autocomplete="off" />
+                <span asp-validation-for="Input.StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">تصاویر</label>
+                <input asp-for="Input.Images"
+                       type="file"
+                       multiple
+                       class="form-control" />
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-5">
+                    ثبت سفارش
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/lib/PersianDatePicker/persian-date.min.js"></script>
+    <script src="~/lib/PersianDatePicker/persian-datepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#persianDate').persianDatepicker({
+                autoClose: true,
+                format: 'YYYY/MM/DD',
+                calendar: {
+                    persian: {
+                        locale: 'fa',
+                        showHint: true,
+                        leapYearMode: 'astronomical'
+                    }
+                },
+                timePicker: {
+                    enabled: true,
+                    second: {
+                        enabled: false
+                    }
+                }
+            });
+        });
+    </script>
+}
