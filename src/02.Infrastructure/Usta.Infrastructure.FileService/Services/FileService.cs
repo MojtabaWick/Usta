@@ -23,6 +23,22 @@ namespace Usta.Infrastructure.FileService.Services
             return Path.Combine("/Images", folder, uniqueFileName);
         }
 
+        public async Task<List<string>> UploadMany(List<IFormFile> files, string folder, CancellationToken cancellationToken)
+        {
+            var result = new List<string>();
+
+            foreach (var file in files)
+            {
+                if (file is null || file.Length == 0)
+                    continue;
+
+                var path = await Upload(file, folder, cancellationToken);
+                result.Add(path);
+            }
+
+            return result;
+        }
+
         public async Task DeleteByUrlAsync(string url, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(url))
