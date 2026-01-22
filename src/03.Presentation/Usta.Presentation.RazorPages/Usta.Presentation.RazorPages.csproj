@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Account\Pages\Shared\" />
+    <Folder Include="Areas\Customer\Pages\Shared\" />
     <Folder Include="wwwroot\Images\Categories\" />
     <Folder Include="wwwroot\Images\Offers\" />
     <Folder Include="wwwroot\Images\Users\" />

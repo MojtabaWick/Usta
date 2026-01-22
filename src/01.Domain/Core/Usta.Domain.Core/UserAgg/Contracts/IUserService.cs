@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.UserAgg.Dtos;
+using Usta.Domain.Core.UserAgg.Entities;
 using Usta.Domain.Core.UserAgg.Enums;
 
 namespace Usta.Domain.Core.UserAgg.Contracts
@@ -34,5 +36,7 @@ namespace Usta.Domain.Core.UserAgg.Contracts
         public Task<AdminUserEditDto> GetUserForAdminEditAsync(int userId, CancellationToken cancellationToken);
 
         public Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken ct);
+
+        public Task<bool> CheckUserCity(int customerId, CancellationToken cancellationToken);
     }
 }

@@ -35,6 +35,11 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
                 cancellationToken);
         }
 
+        public async Task<PSForPlaceOrderDto?> GetForPlaceOrder(int providedServiceId, CancellationToken cancellationToken)
+        {
+            return await providedServiceRepository.GetForPlaceOrder(providedServiceId, cancellationToken);
+        }
+
         public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedServiceByCategory(int categoryId, int pageNumber, int pageSize, string? search,
             CancellationToken cancellationToken)
         {

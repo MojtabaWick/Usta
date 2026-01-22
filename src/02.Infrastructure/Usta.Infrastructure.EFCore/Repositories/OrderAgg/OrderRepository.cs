@@ -7,6 +7,7 @@ using Usta.Domain.Core.CommentAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Contracts;
 using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Entities;
+using Usta.Framework;
 using Usta.Infrastructure.EFCore.Persistence;
 
 namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
@@ -73,6 +74,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                      Status = o.Status,
                      StartDateTime = o.StartDateTime,
                      EndDateTime = o.EndDateTime,
+                     StartShamsiDate = o.StartDateTime.ToPersianDate(),
+                     EndShamsiDate = o.EndDateTime.HasValue ? o.EndDateTime.Value.ToPersianDate() : "-",
                      OffersCount = o.Offers.Count,
                  }).ToListAsync(cancellationToken);
 

@@ -56,15 +56,5 @@ namespace Usta.Presentation.RazorPages.Pages
 
             return Page();
         }
-
-        public IActionResult OnPostPlaceOrder(int productId)
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToPage("/Login", new { area = "Account" });
-            }
-
-            return RedirectToPage("/Order", new { area = "Customer" });
-        }
     }
 }

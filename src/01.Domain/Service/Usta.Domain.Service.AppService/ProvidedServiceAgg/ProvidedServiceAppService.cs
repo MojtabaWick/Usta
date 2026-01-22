@@ -29,6 +29,11 @@ namespace Usta.Domain.AppService.ProvidedServiceAgg
                 search, cancellationToken);
         }
 
+        public async Task<PSForPlaceOrderDto?> GetForPlaceOrder(int providedServiceId, CancellationToken cancellationToken)
+        {
+            return await providedServiceService.GetForPlaceOrder(providedServiceId, cancellationToken);
+        }
+
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var result = await providedServiceService.DeleteAsync(id, cancellationToken);

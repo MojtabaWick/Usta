@@ -105,12 +105,12 @@
                                 از @service.MinPrice.ToString("N0") تومان
                             </p>
 
-                            <form method="post" asp-page-handler="PlaceOrder">
-                                <input type="hidden" name="productId" value="@service.Id" />
-                                <button class="btn btn-outline-primary">
-                                    ثبت درخواست
-                                </button>
-                            </form>
+                            <a asp-page="/PlaceOrder"
+                               asp-area="Customer"
+                               asp-route-serviceId="@service.Id"
+                               class="btn btn-outline-primary">
+                                ثبت درخواست
+                            </a>
                         </div>
 
                     </div>

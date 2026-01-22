@@ -251,8 +251,8 @@ namespace Usta.Domain.Service.UserAgg
                 await _userManager.SetPhoneNumberAsync(user, userDto.PhoneNumber);
             }
 
-            user.FirstName = userDto.FirstName;
-            user.LastName = userDto.LastName;
+            user.FirstName = userDto.FirstName ?? "";
+            user.LastName = userDto.LastName ?? "";
             user.Address = userDto.Address;
             user.CityId = userDto.CityId;
             user.ImageUrl = userDto.ImageUrl;
@@ -361,6 +361,12 @@ namespace Usta.Domain.Service.UserAgg
             }
 
             return Result<bool>.Success("کاربر با موفقیت بروزرسانی شد.");
+        }
+
+        public async Task<bool> CheckUserCity(int customerId, CancellationToken cancellationToken)
+        {
+            return await _userManager.Users
+                .AnyAsync(u => u.Id == customerId && u.CityId.HasValue, cancellationToken);
         }
 
         private async Task<List<int>> GetServiceIdsByUserId(int userId, CancellationToken cancellationToken)

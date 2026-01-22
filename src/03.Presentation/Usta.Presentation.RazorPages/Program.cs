@@ -40,6 +40,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages(options =>
     {
         options.Conventions.AuthorizeAreaFolder("Admin", "/", "AdminPolicy");
+        options.Conventions.AuthorizeAreaFolder("Customer", "/", "CustomerPolicy");
     })
     .AddRazorRuntimeCompilation();
 
@@ -47,6 +48,9 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireRole("Admin"));
+
+    options.AddPolicy("CustomerPolicy", policy =>
+        policy.RequireRole("Customer"));
 });
 
 #region Logging
@@ -127,6 +131,7 @@ builder.Services.AddScoped<ICommentAppService, CommentAppService>();
 builder.Services.AddScoped<IOrderAppService, OrderAppService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderImagesRepository, OrderImagesRepository>();
 
 builder.Services.AddScoped<IOfferAppService, OfferAppService>();
 builder.Services.AddScoped<IOfferService, OfferService>();

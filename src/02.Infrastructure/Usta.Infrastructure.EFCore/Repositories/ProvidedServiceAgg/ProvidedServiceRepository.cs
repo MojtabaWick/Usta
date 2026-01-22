@@ -109,6 +109,18 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
             };
         }
 
+        public async Task<PSForPlaceOrderDto?> GetForPlaceOrder(int providedServiceId, CancellationToken cancellationToken)
+        {
+            return await dbContext.ProvidedServices
+                .AsNoTracking()
+                .Select(ps => new PSForPlaceOrderDto()
+                {
+                    Id = ps.Id,
+                    Title = ps.Title,
+                })
+                .FirstOrDefaultAsync(ps => ps.Id == providedServiceId);
+        }
+
         public async Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken)
         {
             return await dbContext.ProvidedServices
