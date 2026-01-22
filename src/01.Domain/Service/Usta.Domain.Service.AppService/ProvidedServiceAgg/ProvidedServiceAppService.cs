@@ -17,6 +17,18 @@ namespace Usta.Domain.AppService.ProvidedServiceAgg
             return await providedServiceService.GetAllForAdmin(pageNumber, pageSize, search, cancellationToken);
         }
 
+        public async Task<PagedResult<ProvidedServiceDto>> GetAllForHome(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        {
+            return await providedServiceService.GetAllForHome(pageNumber, pageSize, search, cancellationToken);
+        }
+
+        public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedServiceByCategory(int categoryId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            return await providedServiceService.GetAllProvidedServiceByCategory(categoryId, pageNumber, pageSize,
+                search, cancellationToken);
+        }
+
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var result = await providedServiceService.DeleteAsync(id, cancellationToken);

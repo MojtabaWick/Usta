@@ -29,6 +29,19 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
                 cancellationToken);
         }
 
+        public async Task<PagedResult<ProvidedServiceDto>> GetAllForHome(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        {
+            return await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search,
+                cancellationToken);
+        }
+
+        public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedServiceByCategory(int categoryId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            return await providedServiceRepository.GetAllProvidedServiceByCategory(categoryId, pageNumber, pageSize,
+                search, cancellationToken);
+        }
+
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
             return await providedServiceRepository.DeleteAsync(id, cancellationToken);

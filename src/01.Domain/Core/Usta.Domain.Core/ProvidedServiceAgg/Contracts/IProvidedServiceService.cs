@@ -16,6 +16,12 @@ namespace Usta.Domain.Core.ProvidedServiceAgg.Contracts
         Task<PagedResult<ProvidedServiceDto>> GetAllForAdmin(int pageNumber, int pageSize, string? search,
             CancellationToken cancellationToken);
 
+        Task<PagedResult<ProvidedServiceDto>> GetAllForHome(int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken);
+
+        Task<PagedResult<ProvidedServiceDto>> GetAllProvidedServiceByCategory(int categoryId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken);
+
         Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
 
         Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken);

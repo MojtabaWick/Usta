@@ -1,10 +1,140 @@
 ﻿@page
-@model IndexModel
+@model Usta.Presentation.RazorPages.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "صفحه اصلی";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .category-card {
+        cursor: pointer;
+        transition: all .3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        }
+
+    .category-img {
+        height: 160px;
+        width: 100%;
+        object-fit: contain; /* ✅ جلوگیری از زوم */
+        background-color: #f8f9fa;
+        padding: 12px;
+    }
+
+    .service-card {
+        border-radius: 16px;
+        transition: .3s;
+    }
+
+        .service-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,.12);
+        }
+
+    .service-img {
+        width: 160px;
+        height: 140px;
+        object-fit: cover; /* برای سرویس‌ها cover خوبه */
+        border-radius: 12px;
+    }
+</style>
+
+<div class="container my-5">
+
+    <!-- 🔍 Search -->
+    <form method="get" class="mb-4">
+        <div class="input-group input-group-lg">
+            <input type="text"
+                   name="Search"
+                   value="@Model.Search"
+                   class="form-control"
+                   placeholder="دنبال چه سرویسی هستی؟" />
+            <button class="btn btn-primary">جستجو</button>
+        </div>
+    </form>
+
+    <!-- 🧱 Categories -->
+    <div class="row mb-5">
+        @foreach (var cat in Model.Categories)
+        {
+            <div class="col-md-3 mb-3">
+                <a asp-page="/Index"
+                   asp-route-categoryId="@cat.Id"
+                   class="text-decoration-none text-dark">
+
+                    <div class="card category-card">
+                        <img src="@cat.ImagedUrl"
+                             class="category-img" />
+
+                        <div class="card-body text-center">
+                            <h6 class="fw-bold">@cat.Title</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <!-- 🛠 Services -->
+    <div class="row">
+        @foreach (var service in Model.Services.Items)
+        {
+            <div class="col-12 mb-4">
+                <div class="card service-card p-3">
+                    <div class="d-flex gap-3 align-items-center">
+
+                        <img src="@service.ImageUrl"
+                             class="service-img" />
+
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold">@service.Title</h5>
+                            <p class="text-muted small mb-2">
+                                @service.Description
+                            </p>
+
+                            <span class="badge bg-secondary">
+                                @service.CategoryName
+                            </span>
+                        </div>
+
+                        <div class="text-end">
+                            <p class="fw-bold text-success mb-2">
+                                از @service.MinPrice.ToString("N0") تومان
+                            </p>
+
+                            <form method="post" asp-page-handler="PlaceOrder">
+                                <input type="hidden" name="productId" value="@service.Id" />
+                                <button class="btn btn-outline-primary">
+                                    ثبت درخواست
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- 📄 Pagination -->
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= Model.Services.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-page="/Index"
+                       asp-route-pageNumber="@i"
+                       asp-route-search="@Model.Search"
+                       asp-route-categoryId="@Model.SelectedCategoryId">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+
 </div>

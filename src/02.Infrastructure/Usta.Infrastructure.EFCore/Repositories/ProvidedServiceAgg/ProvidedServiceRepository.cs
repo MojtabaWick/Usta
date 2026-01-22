@@ -68,6 +68,47 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
             };
         }
 
+        public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedServiceByCategory(int categoryId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            var query = dbContext.ProvidedServices
+                .AsNoTracking().Where(ps => ps.CategoryId == categoryId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(p =>
+                    p.Title.Contains(search) ||
+                    p.Description != null && p.Description.Contains(search) ||
+                    p.Category.Title.Contains(search)
+                );
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .OrderBy(p => p.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new ProvidedServiceDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    CategoryName = p.Category.Title,
+                    ImageUrl = p.ImageUrl,
+                    MinPrice = p.MinPrice
+                })
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<ProvidedServiceDto>()
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
+
         public async Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken)
         {
             return await dbContext.ProvidedServices
