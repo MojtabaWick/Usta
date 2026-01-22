@@ -6,6 +6,7 @@ namespace Usta.Domain.Core.OrderAgg.Dtos
     public class OrderDto
     {
         public int Id { get; set; }
+        public string CustomerFullName { get; set; }
         public string Description { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime? EndDateTime { get; set; }

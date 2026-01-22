@@ -38,6 +38,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                 .Select(o => new OrderDto()
                 {
                     Id = o.Id,
+                    CustomerFullName = o.Customer.FirstName + " " + o.Customer.LastName,
                     Description = o.Description,
                     Images = o.Images,
                     Status = o.Status,
@@ -69,6 +70,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                  .Select(o => new OrderDto()
                  {
                      Id = o.Id,
+                     CustomerFullName = o.Customer.FirstName + " " + o.Customer.LastName,
                      Description = o.Description,
                      Images = o.Images,
                      Status = o.Status,
