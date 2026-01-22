@@ -14,7 +14,7 @@ namespace Usta.Domain.AppService.OrderAgg
 
         public async Task<Result<bool>> CreateOrder(CreateOrderDto dto, int customerId, CancellationToken cancellationToken)
         {
-            var checkUserProfile = await userService.CheckUserCity(customerId, cancellationToken);
+            var checkUserProfile = await userService.CheckUserProfile(customerId, cancellationToken);
             if (checkUserProfile)
             {
                 var resultBool = await orderService.CreateOrder(dto, customerId, cancellationToken);
@@ -29,7 +29,7 @@ namespace Usta.Domain.AppService.OrderAgg
             }
             else
             {
-                return Result<bool>.Failure("خطا:لطفا شهر سکونت خود را در پنل کاربری انتخاب کنید.");
+                return Result<bool>.Failure("خطا:لطفا پروفایل خود را در پنل کاربری تکمیل کنید.");
             }
         }
     }

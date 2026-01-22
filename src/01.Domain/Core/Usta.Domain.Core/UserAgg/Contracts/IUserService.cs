@@ -37,6 +37,6 @@ namespace Usta.Domain.Core.UserAgg.Contracts
 
         public Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken ct);
 
-        public Task<bool> CheckUserCity(int customerId, CancellationToken cancellationToken);
+        public Task<bool> CheckUserProfile(int customerId, CancellationToken cancellationToken);
     }
 }

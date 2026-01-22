@@ -363,10 +363,27 @@ namespace Usta.Domain.Service.UserAgg
             return Result<bool>.Success("کاربر با موفقیت بروزرسانی شد.");
         }
 
-        public async Task<bool> CheckUserCity(int customerId, CancellationToken cancellationToken)
+        public async Task<bool> CheckUserProfile(int userId, CancellationToken cancellationToken)
         {
-            return await _userManager.Users
-                .AnyAsync(u => u.Id == customerId && u.CityId.HasValue, cancellationToken);
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user is not null)
+            {
+                if (string.IsNullOrWhiteSpace(user.FirstName) ||
+                    string.IsNullOrWhiteSpace(user.LastName) ||
+                    string.IsNullOrWhiteSpace(user.PhoneNumber) ||
+                    user.CityId is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private async Task<List<int>> GetServiceIdsByUserId(int userId, CancellationToken cancellationToken)
