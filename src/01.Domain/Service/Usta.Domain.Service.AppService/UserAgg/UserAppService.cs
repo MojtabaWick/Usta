@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Logging;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.UserAgg.Contracts;
 using Usta.Domain.Core.UserAgg.Dtos;
@@ -9,11 +10,24 @@ using Usta.Domain.Core.UserAgg.Enums;
 
 namespace Usta.Domain.AppService.UserAgg
 {
-    public class UserAppService(IUserService userService, SignInManager<ApplicationUser> signInManager) : IUserAppService
+    public class UserAppService(IUserService userService, SignInManager<ApplicationUser> signInManager, ILogger<UserAppService> _logger) : IUserAppService
     {
         public async Task<IdentityResult> RegisterUserAsync(UserRegisterInputDto userDto, CancellationToken cancellationToken)
         {
-            return await userService.RegisterUserAsync(userDto, cancellationToken);
+            var result = await userService.RegisterUserAsync(userDto, cancellationToken);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"new user with username:{userDto.Email} created.");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _logger.LogError(error.Description);
+                }
+            }
+
+            return result;
         }
 
         public async Task<SignInResult> LoginUserAsync(string userName, string password)
@@ -23,12 +37,36 @@ namespace Usta.Domain.AppService.UserAgg
 
         public async Task<IdentityResult> ChangePasswordWithAdmin(int userId, string password)
         {
-            return await userService.ChangePasswordWithAdmin(userId, password);
+            var result = await userService.ChangePasswordWithAdmin(userId, password);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"admin changed user password with user id:{userId}.");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _logger.LogError(error.Description);
+                }
+            }
+            return result;
         }
 
         public async Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword)
         {
-            return await userService.ChangePasswordWithUser(userId, oldPassword, newPassword);
+            var result = await userService.ChangePasswordWithUser(userId, oldPassword, newPassword);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"user changed password, user id:{userId}.");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _logger.LogError(error.Description);
+                }
+            }
+            return result;
         }
 
         public async Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search, UserType? userType, CancellationToken cancellationToken)
@@ -114,7 +152,16 @@ namespace Usta.Domain.AppService.UserAgg
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            return await userService.DeleteAsync(id, cancellationToken);
+            var result = await userService.DeleteAsync(id, cancellationToken);
+            if (result)
+            {
+                _logger.LogInformation($"user with id:{id} deleted successfully.");
+            }
+            else
+            {
+                _logger.LogError($"can't delete user with id:{id}");
+            }
+            return result;
         }
 
         public async Task<AdminUserEditDto> GetUserForAdminEditAsync(int userId, CancellationToken cancellationToken)
