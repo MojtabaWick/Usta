@@ -13,29 +13,31 @@
 
     <div class="row g-4">
 
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
         <div class="col-md-6">
             <label class="form-label">ایمیل</label>
-            <input asp-for="Input.Email" class="form-control" />
+            <input asp-for="Input.Email" class="form-control"/>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">شماره تماس</label>
-            <input asp-for="Input.PhoneNumber" class="form-control" />
+            <input asp-for="Input.PhoneNumber" class="form-control"/>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">نام</label>
-            <input asp-for="Input.FirstName" class="form-control" />
+            <input asp-for="Input.FirstName" class="form-control"/>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">نام خانوادگی</label>
-            <input asp-for="Input.LastName" class="form-control" />
+            <input asp-for="Input.LastName" class="form-control"/>
         </div>
-        
+
         <div class="col-md-6">
             <label class="form-label">موجودی کیف پول</label>
-            <input asp-for="Input.WalletBalance" class="form-control" />
+            <input asp-for="Input.WalletBalance" class="form-control"/>
         </div>
 
         <div class="col-md-6">

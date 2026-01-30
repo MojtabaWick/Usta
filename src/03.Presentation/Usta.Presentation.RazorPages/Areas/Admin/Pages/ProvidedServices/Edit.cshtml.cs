@@ -21,7 +21,7 @@ namespace Usta.Presentation.RazorPages.Areas.Admin.Pages.ProvidedServices
         [BindProperty]
         public ProvidedServiceEditDto ProvidedServiceEditDto { get; set; }
 
-        public List<CategorySelectDto> CategorySelect { get; set; }
+        public List<CategorySelectDto> CategorySelect { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync(int id, CancellationToken cancellationToken)
         {

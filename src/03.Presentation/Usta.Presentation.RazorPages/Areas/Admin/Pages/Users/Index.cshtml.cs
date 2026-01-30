@@ -37,6 +37,7 @@ namespace Usta.Presentation.RazorPages.Areas.Admin.Pages.Users
         public async Task<IActionResult> OnPostDeleteAsync(int id, CancellationToken cancellationToken)
         {
             await _userAppService.DeleteAsync(id, cancellationToken);
+            Users = await _userAppService.GetAllUsersAsync(PageNumber, 10, Search, UserType, cancellationToken);
             return RedirectToPage("Index");
         }
     }

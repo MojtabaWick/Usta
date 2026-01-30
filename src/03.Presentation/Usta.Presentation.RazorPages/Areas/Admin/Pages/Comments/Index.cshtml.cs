@@ -15,7 +15,7 @@ namespace Usta.Presentation.RazorPages.Areas.Admin.Pages.Comments
             _commentService = commentService;
         }
 
-        public PagedResult<CommentDto> Comments { get; set; }
+        public PagedResult<CommentDto> Comments { get; set; } = new PagedResult<CommentDto>();
 
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;

@@ -51,7 +51,9 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.Orders
-                .AsNoTracking();
+                .IgnoreQueryFilters()
+                .AsNoTracking()
+                .Where(o => !o.IsDeleted);
 
             if (!string.IsNullOrWhiteSpace(search))
             {

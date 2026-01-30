@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Usta.Domain.Core.OrderAgg.Contracts;
 using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
+using Usta.Framework;
 using Usta.Presentation.RazorPages.Extentions;
 
 namespace Usta.Presentation.RazorPages.Areas.Customer.Pages
@@ -43,6 +44,14 @@ namespace Usta.Presentation.RazorPages.Areas.Customer.Pages
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
+            if (Input.StartDate.ToGregorianDateTime() < DateTime.Now)
+            {
+                ModelState.AddModelError("DateError", "روز انتخابی نمیتواند گذشته باشد.");
+            }
+
+            ProvidedService = await _providedServiceAppService
+                .GetForPlaceOrder(Input.ProvidedServiceId, cancellationToken);
+
             if (!ModelState.IsValid)
                 return Page();
 

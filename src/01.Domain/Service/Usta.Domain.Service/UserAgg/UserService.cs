@@ -333,6 +333,9 @@ namespace Usta.Domain.Service.UserAgg
             if (user == null)
                 return Result<bool>.Failure("کاربر یافت نشد");
 
+            if (input.WalletBalance < 0)
+                return Result<bool>.Failure("موجودی کیف پول نمیتواند منفی باشد.");
+
             if (user.Email != input.Email)
             {
                 await _userManager.SetEmailAsync(user, input.Email);
@@ -344,8 +347,8 @@ namespace Usta.Domain.Service.UserAgg
                 await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber);
             }
 
-            user.FirstName = input.FirstName;
-            user.LastName = input.LastName;
+            user.FirstName = input.FirstName ?? "";
+            user.LastName = input.LastName ?? "";
             user.CityId = input.CityId;
             user.Address = input.Address;
             user.IsActive = input.IsActive;

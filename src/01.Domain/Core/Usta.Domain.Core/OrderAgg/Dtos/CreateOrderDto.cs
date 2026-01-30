@@ -15,6 +15,22 @@ namespace Usta.Domain.Core.OrderAgg.Dtos
         [Required(ErrorMessage = "سرویس الزامی است")]
         public int ProvidedServiceId { get; set; }
 
-        public List<IFormFile> Images { get; set; } = [];
+        public List<IFormFile>? Images { get; set; }
+
+        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(StartDate))
+        //    {
+        //        var gregorian = StartDate.ToGregorianDateTime();
+
+        //        if (gregorian < DateTime.Now)
+        //        {
+        //            yield return new ValidationResult(
+        //                "روز انتخابی نمیتواند گذشته باشد.",
+        //                new[] { nameof(StartDate) }
+        //            );
+        //        }
+        //    }
+        //}
     }
 }

@@ -20,7 +20,7 @@ namespace Usta.Presentation.RazorPages.Areas.Admin.Pages.OrdersAndOffers
             _offerService = offerService;
         }
 
-        public PagedResult<OrderDto> Orders { get; set; } = default!;
+        public PagedResult<OrderDto> Orders { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
