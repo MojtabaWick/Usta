@@ -18,5 +18,6 @@
   </Folder>
   <Folder Name="/src/03.Presentation/">
     <Project Path="src/03.Presentation/Usta.Presentation.RazorPages/Usta.Presentation.RazorPages.csproj" Id="ee5faf83-791d-4996-99aa-7e26d70e723e" />
+    <Project Path="src/03.Presentation/Usta.Presentation.WebAPI/Usta.Presentation.WebAPI.csproj" Id="b0cde965-b627-4ae9-9360-3529ab078fa2" />
   </Folder>
 </Solution>

@@ -1,0 +1,6 @@
+@Usta.Presentation.WebAPI_HostAddress = http://localhost:5073
+
+GET {{Usta.Presentation.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
