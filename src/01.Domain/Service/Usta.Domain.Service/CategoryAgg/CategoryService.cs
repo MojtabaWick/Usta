@@ -6,16 +6,19 @@ using Usta.Domain.Core._common;
 using Usta.Domain.Core.CategoryAgg.Contracts;
 using Usta.Domain.Core.CategoryAgg.Dtos;
 using Usta.Domain.Core.CategoryAgg.Entities;
+using Usta.Infrastructure.Cache;
+using Usta.Infrastructure.Cache.Contracts;
 using Usta.Infrastructure.FileService.Contracts;
 
 namespace Usta.Domain.Service.CategoryAgg
 {
-    public class CategoryService(ICategoryRepository categoryRepo, IFileService fileService) : ICategoryService
+    public class CategoryService(ICategoryRepository categoryRepo, IFileService fileService, ICacheService cacheService) : ICategoryService
     {
         private readonly string _categoriesFolder = "Categories";
 
         public async Task<bool> CreateAsync(CategoryCreateDto input, CancellationToken cancellationToken)
         {
+            cacheService.Remove(CacheKeys.Categories);
             input.ImagedUrl = await fileService.Upload(input.ImagFile, _categoriesFolder, cancellationToken);
 
             var newCategory = new Category()
@@ -30,7 +33,14 @@ namespace Usta.Domain.Service.CategoryAgg
 
         public async Task<List<CategoryDto>> GetAllCategories(CancellationToken cancellationToken)
         {
-            return await categoryRepo.GetAllCategories(cancellationToken);
+            var categories = cacheService.Get<List<CategoryDto>?>(CacheKeys.Categories);
+            if (categories is null)
+            {
+                categories = await categoryRepo.GetAllCategories(cancellationToken);
+                cacheService.SetSliding(CacheKeys.Categories, categories, 10);
+            }
+
+            return categories;
         }
 
         public async Task<CategoryEditDto> GetForEditAsync(int id, CancellationToken cancellationToken)
@@ -59,6 +69,7 @@ namespace Usta.Domain.Service.CategoryAgg
 
         public async Task<bool> UpdateAsync(CategoryEditDto input, CancellationToken cancellationToken)
         {
+            cacheService.Remove(CacheKeys.Categories);
             if (input.ImageFile is not null)
             {
                 await fileService.DeleteByUrlAsync(input.ImagedUrl, cancellationToken);
@@ -70,6 +81,7 @@ namespace Usta.Domain.Service.CategoryAgg
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
+            cacheService.Remove(CacheKeys.Categories);
             return await categoryRepo.DeleteAsync(id, cancellationToken);
         }
     }
