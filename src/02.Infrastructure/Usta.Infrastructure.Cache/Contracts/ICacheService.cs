@@ -13,5 +13,9 @@ namespace Usta.Infrastructure.Cache.Contracts
         T Get<T>(string key);
 
         void Remove(string key);
+
+        public void ClearAll();
+
+        public void ClearByPattern(string pattern);
     }
 }
