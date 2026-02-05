@@ -5,11 +5,15 @@ using Usta.Domain.Core._common;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Entities;
+using Usta.Infrastructure.Cache;
+using Usta.Infrastructure.Cache.Contracts;
 using Usta.Infrastructure.FileService.Contracts;
 
 namespace Usta.Domain.Service.ProvidedServiceAgg
 {
-    public class ProvidedServiceService(IProvidedServiceRepository providedServiceRepository, IFileService _fileService) : IProvidedServiceService
+    public class ProvidedServiceService(IProvidedServiceRepository providedServiceRepository,
+        IFileService _fileService,
+        ICacheService _cacheService) : IProvidedServiceService
     {
         private readonly string PicFolder = "ProvidedServices";
 
@@ -25,14 +29,30 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
         public async Task<PagedResult<ProvidedServiceDto>> GetAllForAdmin(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
-            return await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search,
-                cancellationToken);
+            var cacheKey = $"{CacheKeys.ProvidedServices}-{pageNumber}-{search}";
+            var services = _cacheService.Get<PagedResult<ProvidedServiceDto>?>(cacheKey);
+
+            if (services is null)
+            {
+                services = await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search, cancellationToken);
+                _cacheService.Set(cacheKey, services, 10);
+            }
+
+            return services;
         }
 
         public async Task<PagedResult<ProvidedServiceDto>> GetAllForHome(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
-            return await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search,
-                cancellationToken);
+            var cacheKey = $"{CacheKeys.ProvidedServices}-{pageNumber}-{search}";
+            var services = _cacheService.Get<PagedResult<ProvidedServiceDto>?>(cacheKey);
+
+            if (services is null)
+            {
+                services = await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search, cancellationToken);
+                _cacheService.SetSliding(cacheKey, services, 5);
+            }
+
+            return services;
         }
 
         public async Task<PSForPlaceOrderDto?> GetForPlaceOrder(int providedServiceId, CancellationToken cancellationToken)
@@ -43,13 +63,25 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
         public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedServiceByCategory(int categoryId, int pageNumber, int pageSize, string? search,
             CancellationToken cancellationToken)
         {
-            return await providedServiceRepository.GetAllProvidedServiceByCategory(categoryId, pageNumber, pageSize,
-                search, cancellationToken);
+            var cacheKey = $"{CacheKeys.ProvidedServices}-{categoryId}-{pageNumber}-{search}";
+
+            var services = _cacheService.Get<PagedResult<ProvidedServiceDto>?>(cacheKey);
+
+            if (services is null)
+            {
+                services = await providedServiceRepository.GetAllProvidedServiceByCategory(categoryId, pageNumber, pageSize,
+                    search, cancellationToken);
+                _cacheService.SetSliding(cacheKey, services, 5);
+            }
+
+            return services;
         }
 
         public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            return await providedServiceRepository.DeleteAsync(id, cancellationToken);
+            var result = await providedServiceRepository.DeleteAsync(id, cancellationToken);
+            _cacheService.ClearByPattern(CacheKeys.ProvidedServices);
+            return result;
         }
 
         public async Task<ProvidedServiceEditDto?> GetProvidedServiceByIdForEdit(int id, CancellationToken cancellationToken)
@@ -59,6 +91,8 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
         public async Task<bool> Create(CreateProvideServiceDto input, CancellationToken cancellationToken)
         {
+            _cacheService.ClearByPattern(CacheKeys.ProvidedServices);
+
             if (input.ImageFile is not null)
             {
                 input.ImageUrl = await _fileService.Upload(input.ImageFile, PicFolder, cancellationToken);
@@ -78,6 +112,8 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
         public async Task<bool> UpdateProvidedService(ProvidedServiceEditDto input, CancellationToken cancellationToken)
         {
+            _cacheService.ClearByPattern(CacheKeys.ProvidedServices);
+
             if (input.ImaFile is not null)
             {
                 if (input.ImageUrl is not null)

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\00.Framewrok\Usta.Framework\Usta.Framework.csproj" />
+    <ProjectReference Include="..\..\..\02.Infrastructure\Usta.Infrastructure.Cache\Usta.Infrastructure.Cache.csproj" />
     <ProjectReference Include="..\..\..\02.Infrastructure\Usta.Infrastructure.FileService\Usta.Infrastructure.FileService.csproj" />
     <ProjectReference Include="..\..\Core\Usta.Domain.Core\Usta.Domain.Core.csproj" />
   </ItemGroup>
