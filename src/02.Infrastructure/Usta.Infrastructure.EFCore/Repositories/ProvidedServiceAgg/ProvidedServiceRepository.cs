@@ -31,7 +31,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg
         public async Task<PagedResult<ProvidedServiceDto>> GetAllProvidedService(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.ProvidedServices
-                .AsNoTracking();
+                .AsNoTracking().Where(x => !x.Category.IsDeleted);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
