@@ -23,6 +23,8 @@ using Usta.Domain.Service.OrderAgg;
 using Usta.Domain.Service.ProvidedServiceAgg;
 using Usta.Domain.Service.UserAgg;
 using Usta.Framework;
+using Usta.Infrastructure.Cache.Contracts;
+using Usta.Infrastructure.Cache.InMemoryCache;
 using Usta.Infrastructure.EFCore.Persistence;
 using Usta.Infrastructure.EFCore.Repositories.CategoryAgg;
 using Usta.Infrastructure.EFCore.Repositories.CityAgg;
@@ -108,6 +110,8 @@ builder.Services.AddScoped<IOrderImagesRepository, OrderImagesRepository>();
 builder.Services.AddScoped<IOfferAppService, OfferAppService>();
 builder.Services.AddScoped<IOfferService, OfferService>();
 builder.Services.AddScoped<IOfferRepository, OfferRepository>();
+
+builder.Services.AddScoped<ICacheService, InMemoryCacheService>();
 
 #endregion RegisterService
 
