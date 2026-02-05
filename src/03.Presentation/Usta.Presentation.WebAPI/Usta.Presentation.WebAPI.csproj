@@ -11,4 +11,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\01.Domain\Core\Usta.Domain.Core\Usta.Domain.Core.csproj" />
+    <ProjectReference Include="..\..\01.Domain\Service\Usta.Domain.Service.AppService\Usta.Domain.AppService.csproj" />
+    <ProjectReference Include="..\..\01.Domain\Service\Usta.Domain.Service\Usta.Domain.Service.csproj" />
+    <ProjectReference Include="..\..\02.Infrastructure\Usta.Infrastructure.EFCore\Usta.Infrastructure.EFCore.csproj" />
+  </ItemGroup>
+
 </Project>
