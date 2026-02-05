@@ -34,7 +34,7 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
             if (services is null)
             {
-                services = await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search, cancellationToken);
+                services = await providedServiceRepository.GetAllProvidedServiceForAdmin(pageNumber, pageSize, search, cancellationToken);
                 _cacheService.Set(cacheKey, services, 10);
             }
 
