@@ -1,3 +1,20 @@
 ﻿@{
-    Layout = "_Layout";
+    Layout = "Shared/_Layout.cshtml";   // برای کاربر لاگین‌نشده
+
+    if (User.Identity!.IsAuthenticated)
+    {
+        if (User.IsInRole("Admin"))
+        {
+            Layout = "~/Areas/Admin/Pages/Shared/_Layout.cshtml";
+        }
+        else if (User.IsInRole("Customer"))
+        {
+            Layout = "~/Areas/Customer/Pages/Shared/_Layout.cshtml";
+        }
+        else if (User.IsInRole("Expert"))
+        {
+            Layout = "~/Areas/Expert/Pages/Shared/_Layout.cshtml";
+        }
+    }
+
 }
