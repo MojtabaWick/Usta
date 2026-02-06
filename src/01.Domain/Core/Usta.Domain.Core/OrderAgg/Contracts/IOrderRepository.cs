@@ -6,12 +6,15 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
 {
     public interface IOrderRepository
     {
-        public Task<bool> Add(Order newOrder, CancellationToken cancellationToken);
+        Task<bool> Add(Order newOrder, CancellationToken cancellationToken);
 
-        public Task<bool> Update(OrderEditInput input, CancellationToken cancellationToken);
+        Task<bool> Update(OrderEditInput input, CancellationToken cancellationToken);
 
-        public Task<OrderDto?> GetById(int id, CancellationToken cancellationToken);
+        Task<OrderDto?> GetById(int id, CancellationToken cancellationToken);
 
-        public Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
+        Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
+
+        Task<PagedResult<OrderAndOfferDto>> GetCustomerOrders(int customerId, int pageNumber, int pageSize,
+            string? search, CancellationToken cancellationToken);
     }
 }

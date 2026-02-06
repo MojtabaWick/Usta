@@ -35,5 +35,11 @@ namespace Usta.Domain.AppService.OrderAgg
                 return Result<bool>.Failure("خطا:لطفا پروفایل خود را در پنل کاربری تکمیل کنید.");
             }
         }
+
+        public async Task<PagedResult<OrderAndOfferDto>> GetCustomerOrders(int customerId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            return await orderService.GetCustomerOrders(customerId, pageNumber, pageSize, search, cancellationToken);
+        }
     }
 }

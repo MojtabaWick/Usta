@@ -21,7 +21,6 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
             else
             {
                 throw new Exception($"order with {orderId} not found");
-                return false;
             }
         }
 
@@ -36,7 +35,6 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
             else
             {
                 throw new Exception($"order with {orderId} not found");
-                return false;
             }
         }
     }

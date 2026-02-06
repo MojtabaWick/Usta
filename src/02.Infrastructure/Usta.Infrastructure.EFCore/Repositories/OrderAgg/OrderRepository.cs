@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.CommentAgg.Dtos;
+using Usta.Domain.Core.OfferAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Contracts;
 using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Entities;
@@ -46,6 +47,61 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                     EndDateTime = o.EndDateTime,
                     OffersCount = o.Offers.Count,
                 }).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<PagedResult<OrderAndOfferDto>> GetCustomerOrders(int customerId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        {
+            var query = dbContext.Orders
+                .AsNoTracking()
+                .Where(o => o.CustomerId == customerId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(o =>
+                    o.ProvidedService.Title.Contains(search) ||
+                    (o.ProvidedService.Description != null && o.ProvidedService.Description.Contains(search)) ||
+                    o.Description.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .OrderByDescending(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(o => new OrderAndOfferDto()
+                {
+                    Id = o.Id,
+                    ProvidedServiceTitle = o.ProvidedService.Title,
+                    CustomerFullName = o.Customer.FirstName + " " + o.Customer.LastName,
+                    Description = o.Description,
+                    Images = o.Images,
+                    Status = o.Status,
+                    StartDateTime = o.StartDateTime,
+                    EndDateTime = o.EndDateTime,
+                    StartShamsiDate = o.StartDateTime.ToPersianDate(),
+                    EndShamsiDate = o.EndDateTime.HasValue ? o.EndDateTime.Value.ToPersianDate() : "-",
+                    OffersCount = o.Offers.Count,
+                    Offers = o.Offers.Select(offer => new OfferDto
+                    {
+                        Id = offer.Id,
+                        Description = offer.Description,
+                        Price = offer.Price,
+                        ExpertId = offer.ExpertId,
+                        ExpertName = offer.Expert.FirstName + " " + offer.Expert.LastName,
+                        ImageUrl = offer.ImageUrl,
+                        IsAccepted = offer.IsAccepted,
+                        StartDateTime = offer.StartDateTime
+                    }).ToList()
+                }).ToListAsync(cancellationToken);
+
+            return new PagedResult<OrderAndOfferDto>
+            {
+                Items = items,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)

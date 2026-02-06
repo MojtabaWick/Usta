@@ -17,6 +17,12 @@ namespace Usta.Domain.Core.OrderAgg.Enums
         WaitingForAcceptance = 3,
 
         [Display(Name = "در حال انجام")]
-        InProgress = 4
+        InProgress = 4,
+
+        [Display(Name = "در انتظار پرداخت")]
+        WaitingForPayment = 5,
+
+        [Display(Name = "پرداخت شده")]
+        Paid = 6,
     }
 }

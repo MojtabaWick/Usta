@@ -1,0 +1,45 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Customer.Pages.IndexModel
+@{
+    ViewData["Title"] = "داشبورد کاربری";
+}
+
+<h1>داشبورد کاربری</h1>
+<hr />
+
+<div class="row">
+    
+    <!-- منوی عمودی سمت راست -->
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>منوی کاربری</h5>
+            </div>
+            <div class="card-body">
+                <ul class="nav flex-column">
+                    <li class="nav-item" >
+                        <a class="nav-link text-dark" asp-area="Account" asp-page="/Profile/Index">پروفایل</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Customer" asp-page="/OrdersAndOffers/Index">سفارشات و پیشنهادات</a>
+                    </li>  
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Customer" asp-page="/Comments/Index">مدیریت نظرات</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- محتوای اصلی سمت چپ (می‌تونید محتوای دلخواه اضافه کنید، مثلاً آمار یا خوش‌آمدگویی) -->
+    <div class="col-md-9">
+        <p>خوش آمدید به پنل مدیریت. از منوی سمت راست گزینه مورد نظر را انتخاب کنید.</p>
+        <!-- اینجا می‌تونید محتوای بیشتری مثل جدول آمار یا چیزهای دیگه اضافه کنید -->
+    </div>
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}  <!-- اگر نیاز به validation دارید، نگه دارید -->
+}
