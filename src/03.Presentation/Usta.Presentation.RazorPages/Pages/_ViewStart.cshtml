@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_Layout.cshtml";   // برای کاربر لاگین‌نشده
+    Layout = "Shared/_Layout.cshtml";   // برای کاربر لاگین‌نشده
 
     if (User.Identity!.IsAuthenticated)
     {
@@ -16,4 +16,5 @@
             Layout = "~/Areas/Expert/Pages/Shared/_Layout.cshtml";
         }
     }
+
 }
