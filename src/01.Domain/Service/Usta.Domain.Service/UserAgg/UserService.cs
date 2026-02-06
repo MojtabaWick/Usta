@@ -420,7 +420,7 @@ namespace Usta.Domain.Service.UserAgg
         public async Task IncreaseWallet(int expertId, decimal price, CancellationToken cancellationToken)
         {
             var affectedRows = await _userManager.Users
-                .Where(u => u.Id == expertId && u.WalletBalance >= price)
+                .Where(u => u.Id == expertId)
                 .ExecuteUpdateAsync(
                     setter => setter.SetProperty(
                         u => u.WalletBalance,

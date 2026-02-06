@@ -28,7 +28,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
 
         public async Task<bool> CheckOfferExist(int offerId, CancellationToken cancellationToken)
         {
-            return await dbContext.Offers.AnyAsync(o => o.Id == offerId && o.IsAccepted == true, cancellationToken);
+            return await dbContext.Offers.AnyAsync(o => o.Id == offerId, cancellationToken);
         }
 
         public async Task<bool> AcceptOffer(int offerId, CancellationToken cancellationToken)

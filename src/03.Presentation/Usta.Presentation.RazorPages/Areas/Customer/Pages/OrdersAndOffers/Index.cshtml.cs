@@ -29,19 +29,19 @@ namespace Usta.Presentation.RazorPages.Areas.Customer.Pages.OrdersAndOffers
 
         public async Task<IActionResult> OnPostAcceptOfferAsync(int orderId, int offerId, CancellationToken cancellationToken)
         {
-            //await _orderAppService.AcceptOffer(orderId, offerId, cancellationToken);
+            await _orderAppService.AcceptOffer(orderId, offerId, cancellationToken);
             return RedirectToPage("Index");
         }
 
         public async Task<IActionResult> OnPostSetDoneAsync(int orderId, CancellationToken cancellationToken)
         {
-            //await _orderAppService.SetOrderDone(orderId, cancellationToken);
+            await _orderAppService.SetOrderDone(orderId, cancellationToken);
             return RedirectToPage("Index");
         }
 
         public async Task<IActionResult> OnPostPayOrderAsync(int orderId, CancellationToken cancellationToken)
         {
-            //await _orderAppService.PayOrder(orderId, cancellationToken);
+            await _orderAppService.PayOrder(orderId, cancellationToken);
             return RedirectToPage("Index");
         }
     }
