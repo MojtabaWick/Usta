@@ -46,6 +46,8 @@ builder.Services.AddSwaggerGen();
 
 #region RegisterService
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Usta;Trusted_Connection=True;"));
 
