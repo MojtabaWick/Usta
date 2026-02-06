@@ -161,7 +161,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
         {
             var affectedRow = await dbContext.Orders.Where(o => o.Id == orderId)
                 .ExecuteUpdateAsync(setter => setter
-                    .SetProperty(o => o.Status, OrderStatus.Completed), cancellationToken);
+                    .SetProperty(o => o.Status, OrderStatus.Completed)
+                    .SetProperty(o => o.EndDateTime, DateTime.Now), cancellationToken);
         }
 
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
