@@ -1,10 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@{
-    Layout = "_Layout.cshtml";
+﻿@{
+    Layout = "_Layout.cshtml";   // برای کاربر لاگین‌نشده
 
-    // این روش کاملاً null-safe و توصیه‌شده مایکروسافته
-    if (SignInManager.IsSignedIn(User))
+    if (User.Identity!.IsAuthenticated)
     {
         if (User.IsInRole("Admin"))
         {
