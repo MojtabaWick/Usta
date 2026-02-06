@@ -38,5 +38,11 @@ namespace Usta.Domain.Core.UserAgg.Contracts
         public Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken ct);
 
         public Task<bool> CheckUserProfile(int customerId, CancellationToken cancellationToken);
+
+        public Task<bool> CheckUserWalletBalance(int customerId, decimal price, CancellationToken cancellationToken);
+
+        public Task DecreaseWallet(int customerId, decimal price, CancellationToken cancellationToken);
+
+        public Task IncreaseWallet(int expertId, decimal price, CancellationToken cancellationToken);
     }
 }

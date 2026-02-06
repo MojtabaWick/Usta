@@ -57,5 +57,45 @@ namespace Usta.Domain.Service.OrderAgg
         {
             return await orderRepository.GetCustomerOrders(customerId, pageNumber, pageSize, search, cancellationToken);
         }
+
+        public async Task<decimal> GetPriceByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.GetPriceByOrderId(orderId, cancellationToken);
+        }
+
+        public async Task<int> GetExpertIdByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.GetExpertIdByOrderId(orderId, cancellationToken);
+        }
+
+        public async Task<int> GetCustomerIdByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.GetCustomerIdByOrderId(orderId, cancellationToken);
+        }
+
+        public async Task<bool> SetWaitingForPayment(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.SetWaitingForPayment(orderId, cancellationToken);
+        }
+
+        public async Task SetDone(int orderId, CancellationToken cancellationToken)
+        {
+            await orderRepository.SetDone(orderId, cancellationToken);
+        }
+
+        public async Task<bool> OrderAcceptOffer(int orderId, int offerId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.OrderAcceptOffer(orderId, offerId, cancellationToken);
+        }
+
+        public async Task<bool> CheckOrderAcceptedOffer(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.CheckOrderAcceptedOffer(orderId, cancellationToken);
+        }
+
+        public async Task<bool> checkOrderExist(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.checkOrderExist(orderId, cancellationToken);
+        }
     }
 }

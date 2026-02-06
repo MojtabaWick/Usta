@@ -16,5 +16,21 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
 
         Task<PagedResult<OrderAndOfferDto>> GetCustomerOrders(int customerId, int pageNumber, int pageSize,
             string? search, CancellationToken cancellationToken);
+
+        Task<decimal> GetPriceByOrderId(int orderId, CancellationToken cancellationToken);
+
+        Task<int> GetExpertIdByOrderId(int orderId, CancellationToken cancellationToken);
+
+        Task<int> GetCustomerIdByOrderId(int orderId, CancellationToken cancellationToken);
+
+        Task<bool> SetWaitingForPayment(int orderId, CancellationToken cancellationToken);
+
+        Task<bool> OrderAcceptOffer(int orderId, int offerId, CancellationToken cancellationToken);
+
+        Task<bool> CheckOrderAcceptedOffer(int orderId, CancellationToken cancellationToken);
+
+        Task<bool> checkOrderExist(int orderId, CancellationToken cancellationToken);
+
+        Task SetDone(int orderId, CancellationToken cancellationToken);
     }
 }

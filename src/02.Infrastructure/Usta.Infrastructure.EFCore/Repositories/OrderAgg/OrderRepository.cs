@@ -8,6 +8,7 @@ using Usta.Domain.Core.OfferAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Contracts;
 using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Entities;
+using Usta.Domain.Core.OrderAgg.Enums;
 using Usta.Framework;
 using Usta.Infrastructure.EFCore.Persistence;
 
@@ -102,6 +103,65 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                 PageSize = pageSize,
                 TotalCount = totalCount
             };
+        }
+
+        public async Task<decimal> GetPriceByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders.Where(o => o.Id == orderId)
+                .Select(o => o.AcceptedOffer!.Price)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<int> GetExpertIdByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders.Where(o => o.Id == orderId)
+                .Select(o => o.AcceptedOffer!.ExpertId).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<int> GetCustomerIdByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders.Where(o => o.Id == orderId)
+                .Select(o => o.CustomerId)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<bool> SetWaitingForPayment(int orderId, CancellationToken cancellationToken)
+        {
+            var affectedRow = await dbContext.Orders.Where(o => o.Id == orderId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(o => o.Status, OrderStatus.WaitingForPayment), cancellationToken);
+
+            return affectedRow > 0;
+        }
+
+        public async Task<bool> OrderAcceptOffer(int orderId, int offerId, CancellationToken cancellationToken)
+        {
+            var affectedRow = await dbContext.Orders
+                .Where(o => o.Id == orderId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(o => o.AcceptedOfferId, offerId)
+                    .SetProperty(o => o.Status, OrderStatus.InProgress), cancellationToken);
+            return affectedRow > 0;
+        }
+
+        public async Task<bool> CheckOrderAcceptedOffer(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders
+                .AnyAsync(
+                    o => o.Id == orderId && o.AcceptedOfferId != null,
+                    cancellationToken);
+        }
+
+        public async Task<bool> checkOrderExist(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders.AnyAsync(o => o.Id == orderId, cancellationToken);
+        }
+
+        public async Task SetDone(int orderId, CancellationToken cancellationToken)
+        {
+            var affectedRow = await dbContext.Orders.Where(o => o.Id == orderId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(o => o.Status, OrderStatus.Completed), cancellationToken);
         }
 
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)

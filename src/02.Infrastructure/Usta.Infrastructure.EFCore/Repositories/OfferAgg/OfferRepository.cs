@@ -25,5 +25,18 @@ namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
                       IsAccepted = o.IsAccepted
                   }).ToListAsync(cancellationToken);
         }
+
+        public async Task<bool> CheckOfferExist(int offerId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Offers.AnyAsync(o => o.Id == offerId && o.IsAccepted == true, cancellationToken);
+        }
+
+        public async Task<bool> AcceptOffer(int offerId, CancellationToken cancellationToken)
+        {
+            var affcetedRow = await dbContext.Offers.Where(o => o.Id == offerId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(o => o.IsAccepted, true), cancellationToken);
+            return affcetedRow > 0;
+        }
     }
 }

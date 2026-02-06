@@ -389,6 +389,51 @@ namespace Usta.Domain.Service.UserAgg
             }
         }
 
+        public async Task<bool> CheckUserWalletBalance(int customerId, decimal price, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.Users.Where(u => u.Id == customerId).FirstOrDefaultAsync(cancellationToken);
+            if (user is null)
+            {
+                throw new Exception($"user with id {customerId} not found.");
+            }
+
+            return user.WalletBalance >= price;
+        }
+
+        public async Task DecreaseWallet(int customerId, decimal price, CancellationToken cancellationToken)
+        {
+            var affectedRows = await _userManager.Users
+                .Where(u => u.Id == customerId && u.WalletBalance >= price)
+                .ExecuteUpdateAsync(
+                    setter => setter.SetProperty(
+                        u => u.WalletBalance,
+                        u => u.WalletBalance - price),
+                    cancellationToken);
+
+            if (affectedRows == 0)
+            {
+                throw new InvalidOperationException(
+                    "کاربر یافت نشد یا موجودی کیف پول کافی نیست.");
+            }
+        }
+
+        public async Task IncreaseWallet(int expertId, decimal price, CancellationToken cancellationToken)
+        {
+            var affectedRows = await _userManager.Users
+                .Where(u => u.Id == expertId && u.WalletBalance >= price)
+                .ExecuteUpdateAsync(
+                    setter => setter.SetProperty(
+                        u => u.WalletBalance,
+                        u => u.WalletBalance + price),
+                    cancellationToken);
+
+            if (affectedRows == 0)
+            {
+                throw new InvalidOperationException(
+                    "کاربر یافت نشد یا موجودی کیف پول کافی نیست.");
+            }
+        }
+
         private async Task<List<int>> GetServiceIdsByUserId(int userId, CancellationToken cancellationToken)
         {
             return await _userManager.Users

@@ -9,5 +9,15 @@ namespace Usta.Domain.Service.OfferAgg
         {
             return await offerRepository.GetByOrderId(orderId, cancellationToken);
         }
+
+        public async Task<bool> CheckOfferExist(int offerId, CancellationToken cancellationToken)
+        {
+            return await offerRepository.CheckOfferExist(offerId, cancellationToken);
+        }
+
+        public async Task<bool> AcceptOffer(int offerId, CancellationToken cancellationToken)
+        {
+            return await offerRepository.AcceptOffer(offerId, cancellationToken);
+        }
     }
 }
