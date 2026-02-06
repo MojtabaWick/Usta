@@ -1,3 +1,22 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    Layout = "_Layout.cshtml";
+
+    // این روش کاملاً null-safe و توصیه‌شده مایکروسافته
+    if (SignInManager.IsSignedIn(User))
+    {
+        if (User.IsInRole("Admin"))
+        {
+            Layout = "~/Areas/Admin/Pages/Shared/_Layout.cshtml";
+        }
+        else if (User.IsInRole("Customer"))
+        {
+            Layout = "~/Areas/Customer/Pages/Shared/_Layout.cshtml";
+        }
+        else if (User.IsInRole("Expert"))
+        {
+            Layout = "~/Areas/Expert/Pages/Shared/_Layout.cshtml";
+        }
+    }
 }
