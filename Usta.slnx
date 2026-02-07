@@ -13,6 +13,7 @@
   </Folder>
   <Folder Name="/src/02.Infrastructure/">
     <Project Path="src/02.Infrastructure/Usta.Infrastructure.Cache/Usta.Infrastructure.Cache.csproj" Id="2c69a844-6080-41d3-97bc-69eb650cf4d1" />
+    <Project Path="src/02.Infrastructure/Usta.Infrastructure.Dapper/Usta.Infrastructure.Dapper.csproj" Id="7ddcfe4f-bf5b-45ff-b270-8b3ffbfe3e66" />
     <Project Path="src/02.Infrastructure/Usta.Infrastructure.EFCore/Usta.Infrastructure.EFCore.csproj" />
     <Project Path="src/02.Infrastructure/Usta.Infrastructure.FileService/Usta.Infrastructure.FileService.csproj" Id="43701b97-4e2b-4296-a96b-3d16844bfe67" />
   </Folder>
