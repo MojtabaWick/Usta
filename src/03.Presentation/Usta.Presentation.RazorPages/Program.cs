@@ -75,7 +75,7 @@ builder.Host.UseSerilog();
 #region RegisterService
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetValue<string>("ConnectionStrings:SQL")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
     {
