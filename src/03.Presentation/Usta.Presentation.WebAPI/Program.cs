@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Usta.Domain.AppService.CategoryAgg;
 using Usta.Domain.AppService.CityAgg;
@@ -25,6 +26,8 @@ using Usta.Domain.Service.UserAgg;
 using Usta.Framework;
 using Usta.Infrastructure.Cache.Contracts;
 using Usta.Infrastructure.Cache.InMemoryCache;
+using Usta.Infrastructure.Dapper.Persistence.Contracts;
+using Usta.Infrastructure.Dapper.Persistence.SqlServer;
 using Usta.Infrastructure.EFCore.Persistence;
 using Usta.Infrastructure.EFCore.Repositories.CategoryAgg;
 using Usta.Infrastructure.EFCore.Repositories.CityAgg;
@@ -49,7 +52,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Usta;Trusted_Connection=True;"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
+
+builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
 {
