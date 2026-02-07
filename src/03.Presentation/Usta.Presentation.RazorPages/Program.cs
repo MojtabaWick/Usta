@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Usta.Domain.AppService.CategoryAgg;
@@ -26,6 +27,9 @@ using Usta.Domain.Service.UserAgg;
 using Usta.Framework;
 using Usta.Infrastructure.Cache.Contracts;
 using Usta.Infrastructure.Cache.InMemoryCache;
+using Usta.Infrastructure.Dapper.Persistence.Contracts;
+using Usta.Infrastructure.Dapper.Persistence.SqlServer;
+using Usta.Infrastructure.Dapper.Repositories.CityAgg;
 using Usta.Infrastructure.EFCore.Persistence;
 using Usta.Infrastructure.EFCore.Repositories.CategoryAgg;
 using Usta.Infrastructure.EFCore.Repositories.CityAgg;
@@ -77,6 +81,8 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
+builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
     {
         options.SignIn.RequireConfirmedEmail = false;
@@ -114,7 +120,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IFileService, FileService>();
 
-builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ICityRepository, CityDapperRepository>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ICityAppService, CityAppService>();
 
