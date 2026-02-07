@@ -97,5 +97,15 @@ namespace Usta.Domain.Service.OrderAgg
         {
             return await orderRepository.checkOrderExist(orderId, cancellationToken);
         }
+
+        public async Task<bool> OrderIsCompleted(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.OrderIsCompleted(orderId, cancellationToken);
+        }
+
+        public async Task<bool> OrderHasComment(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.OrderHasComment(orderId, cancellationToken);
+        }
     }
 }

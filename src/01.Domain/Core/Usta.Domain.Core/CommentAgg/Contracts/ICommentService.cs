@@ -13,5 +13,7 @@ namespace Usta.Domain.Core.CommentAgg.Contracts
         Task<bool> ApproveAsync(int id, CancellationToken cancellationToken);
 
         Task<bool> RejectAsync(int id, CancellationToken cancellationToken);
+
+        Task<bool> CreateComment(CommentInputDto input, int expertId, CancellationToken cancellationToken);
     }
 }

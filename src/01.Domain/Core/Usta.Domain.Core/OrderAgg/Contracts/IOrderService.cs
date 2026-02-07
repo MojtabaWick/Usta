@@ -30,5 +30,9 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
         Task<bool> CheckOrderAcceptedOffer(int orderId, CancellationToken cancellationToken);
 
         Task<bool> checkOrderExist(int orderId, CancellationToken cancellationToken);
+
+        Task<bool> OrderIsCompleted(int orderId, CancellationToken cancellationToken);
+
+        Task<bool> OrderHasComment(int orderId, CancellationToken cancellationToken);
     }
 }

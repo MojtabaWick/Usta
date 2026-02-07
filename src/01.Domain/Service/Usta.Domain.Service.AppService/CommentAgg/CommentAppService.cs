@@ -5,10 +5,11 @@ using Microsoft.Extensions.Logging;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.CommentAgg.Contracts;
 using Usta.Domain.Core.CommentAgg.Dtos;
+using Usta.Domain.Core.OrderAgg.Contracts;
 
 namespace Usta.Domain.AppService.CommentAgg
 {
-    public class CommentAppService(ICommentService commentService, ILogger<CommentAppService> _logger) : ICommentAppService
+    public class CommentAppService(ICommentService commentService, IOrderService orderService, ILogger<CommentAppService> _logger) : ICommentAppService
     {
         public async Task<PagedResult<CommentDto>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
@@ -36,6 +37,23 @@ namespace Usta.Domain.AppService.CommentAgg
             }
 
             return result;
+        }
+
+        public async Task<Result<bool>> CreateComment(CommentInputDto input, CancellationToken cancellationToken)
+        {
+            var hasComment = await orderService.OrderHasComment(input.OrderId, cancellationToken);
+            if (hasComment)
+                return Result<bool>.Failure("نمیتوان بیش از یک نظر برای هر سفارش ثبت کرد.");
+
+            var orderIsCompleted = await orderService.OrderIsCompleted(input.OrderId, cancellationToken);
+            if (!orderIsCompleted)
+                return Result<bool>.Failure("خظای ثبت کامنت:سفارش باید پایان یافته باشد.");
+
+            var expertId = await orderService.GetExpertIdByOrderId(input.OrderId, cancellationToken);
+
+            var result = await commentService.CreateComment(input, expertId, cancellationToken);
+            return result ? Result<bool>.Success("نظر شما با موفقیت ثبت شد. سپاس از شما!")
+                : Result<bool>.Failure("ثبت نظر با خطا مواجه شده است.");
         }
     }
 }

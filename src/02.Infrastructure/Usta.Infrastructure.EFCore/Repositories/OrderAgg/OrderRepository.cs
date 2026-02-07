@@ -165,6 +165,20 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                     .SetProperty(o => o.EndDateTime, DateTime.Now), cancellationToken);
         }
 
+        public async Task<bool> OrderIsCompleted(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders
+                .Where(o => o.Id == orderId)
+                .AnyAsync(o => o.Status == OrderStatus.Completed, cancellationToken);
+        }
+
+        public async Task<bool> OrderHasComment(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders
+                .Where(o => o.Id == orderId)
+                .AnyAsync(o => o.Comment != null, cancellationToken);
+        }
+
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.Orders

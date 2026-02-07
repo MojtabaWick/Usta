@@ -2,6 +2,7 @@
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.CommentAgg.Contracts;
 using Usta.Domain.Core.CommentAgg.Dtos;
+using Usta.Domain.Core.CommentAgg.Entities;
 using Usta.Infrastructure.EFCore.Persistence;
 
 namespace Usta.Infrastructure.EFCore.Repositories.CommentAgg
@@ -52,6 +53,12 @@ namespace Usta.Infrastructure.EFCore.Repositories.CommentAgg
                     .SetProperty(c => c.IsApproved, false), cancellationToken);
 
             return affectedRow > 0;
+        }
+
+        public async Task<bool> AddComment(Comment newComment, CancellationToken cancellationToken)
+        {
+            dbContext.Comments.Add(newComment);
+            return await dbContext.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

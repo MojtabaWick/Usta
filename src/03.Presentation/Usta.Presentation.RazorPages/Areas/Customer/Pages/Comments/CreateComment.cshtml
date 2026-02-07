@@ -1,0 +1,89 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Customer.Pages.Comments.CreateCommentModel
+@{
+    ViewData["Title"] = "ثبت نظر";
+}
+
+<div class="container py-5" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-4">
+                    <h3 class="mb-0 fw-bold">
+                        <i class="bi bi-chat-dots-fill"></i>
+                        ثبت نظر برای سفارش # @Model.NewComment.OrderId
+                    </h3>
+                </div>
+
+                <div class="card-body p-5">
+
+                    <form method="post" asp-page-handler="">
+
+                        @if (!ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All" class="alert alert-danger d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                            </div>
+                        }
+
+                        <input type="hidden" asp-for="NewComment.OrderId"/>
+
+                        <!-- ستاره‌ها -->
+                        <div class="mb-4 text-center">
+                            <label class="form-label fw-bold fs-5 d-block mb-3">امتیاز شما به کارشناس چقدره؟</label>
+
+                            <div class="star-rating d-inline-flex">
+                                @for (int i = 5; i >= 1; i--)
+                                {
+                                    <input type="radio" id="star-@i" name="NewComment.Rating" value="@i" class="d-none"
+                                           asp-for="NewComment.Rating"/>
+                                    <label for="star-@i" class="star mx-1 fs-1">★</label>
+                                }
+                            </div>
+                            <span asp-validation-for="NewComment.Rating" class="text-danger d-block mt-2"></span>
+                        </div>
+
+                        <!-- متن نظر -->
+                        <div class="mb-4">
+                            <label asp-for="NewComment.Text" class="form-label fw-bold">نظر و تجربهٔ شما</label>
+                            <textarea asp-for="NewComment.Text" class="form-control" rows="7"
+                                      placeholder="چه چیزی در مورد این کارشناس و کارش خوشتون اومد یا اومد؟"></textarea>
+                            <span asp-validation-for="NewComment.Text" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold">
+                            <i class="bi bi-send-fill"></i> ارسال نظر
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-light text-center py-3">
+                    <small class="text-muted">نظر شما به بهبود کیفیت خدمات کمک زیادی می‌کنه ❤️</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .star-rating {
+        direction: rtl; /* مهم برای راست‌چین بودن و hover درست */
+        font-size: 2.8rem;
+        color: #ddd;
+    }
+
+        .star-rating label {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+            .star-rating input:checked ~ label,
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+                color: #f39c12; /* رنگ طلایی زیبا */
+            }
+
+        .star-rating input:checked + label {
+            color: #f39c12;
+        }
+</style>

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Usta.Domain.Core._common;
 using Usta.Domain.Core.OrderAgg.Contracts;
+using Usta.Domain.Core.OrderAgg.Entities;
 using Usta.Presentation.RazorPages.Extentions;
 
 namespace Usta.Presentation.RazorPages.Areas.Customer.Pages.OrdersAndOffers
@@ -43,6 +44,11 @@ namespace Usta.Presentation.RazorPages.Areas.Customer.Pages.OrdersAndOffers
         {
             await _orderAppService.PayOrder(orderId, cancellationToken);
             return RedirectToPage("Index");
+        }
+
+        public async Task<IActionResult> OnPostCreateCommentAsync(int orderId, CancellationToken cancellationToken)
+        {
+            return RedirectToPage("/Comments/CreateComment", new { area = "Customer", orderId });
         }
     }
 }
