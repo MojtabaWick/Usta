@@ -1,9 +1,12 @@
-﻿using Usta.Domain.Core.OfferAgg.Dtos;
+﻿using Usta.Domain.Core._common;
+using Usta.Domain.Core.OfferAgg.Dtos;
 
 namespace Usta.Domain.Core.OfferAgg.Contracts
 {
     public interface IOfferAppService
     {
         public Task<List<OfferDto>> GetByOrderId(int orderId, CancellationToken cancellationToken);
+
+        public Task<Result<bool>> CreateOffer(CreateOfferDto input, CancellationToken cancellationToken);
     }
 }

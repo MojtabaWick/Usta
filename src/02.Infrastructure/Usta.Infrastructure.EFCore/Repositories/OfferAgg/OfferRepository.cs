@@ -1,12 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Usta.Domain.Core.OfferAgg.Contracts;
 using Usta.Domain.Core.OfferAgg.Dtos;
+using Usta.Domain.Core.OfferAgg.Entities;
 using Usta.Infrastructure.EFCore.Persistence;
 
 namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
 {
     public class OfferRepository(AppDbContext dbContext) : IOfferRepository
     {
+        public async Task<bool> CreateOffer(Offer newOffer, CancellationToken cancellationToken)
+        {
+            dbContext.Offers.Add(newOffer);
+            return await dbContext.SaveChangesAsync(cancellationToken) > 0;
+        }
+
         public async Task<List<OfferDto>> GetByOrderId(int orderId, CancellationToken cancellationToken)
         {
             return await dbContext.Offers

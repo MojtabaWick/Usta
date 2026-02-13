@@ -1,0 +1,81 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Expert.Pages.Offer.CreateOfferModel
+@{
+    ViewData["Title"] = "ارسال پیشنهاد";
+}
+<link rel="stylesheet" href="~/lib/PersianDatePicker/persian-datepicker.min.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> <!-- Assuming you have custom CSS if needed -->
+
+<div class="container my-5">
+    <div class="card shadow-lg p-4 rounded-4 bg-light">
+        <h4 class="mb-4 fw-bold text-center text-primary">ارسال پیشنهاد برای سفارش</h4>
+        <div class="alert alert-info text-center mb-4">
+            شما در حال ارسال پیشنهاد برای سفارش شماره <strong>@Model.Input.OrderId</strong> هستید.
+        </div>
+        <div asp-validation-summary="All" class="text-danger mb-4"></div>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Input.OrderId" />
+            <input type="hidden" asp-for="Input.ExpertId" />
+            <input type="hidden" asp-for="Input.ImageUrl" /> <!-- If needed, otherwise remove -->
+
+            <div class="mb-3">
+                <label asp-for="Input.Price" class="form-label fw-semibold">قیمت (تومان)</label>
+                <input asp-for="Input.Price" class="form-control" type="number" min="0" step="any" placeholder="قیمت پیشنهادی را وارد کنید" />
+                <span asp-validation-for="Input.Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Description" class="form-label fw-semibold">توضیحات</label>
+                <textarea asp-for="Input.Description" class="form-control" rows="4" placeholder="توضیحات پیشنهاد خود را بنویسید"></textarea>
+                <span asp-validation-for="Input.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.StartDateTime" class="form-label fw-semibold">تاریخ و زمان شروع (شمسی)</label>
+                <input asp-for="Input.StartDateTime" class="form-control" id="persianDateTime" autocomplete="off" placeholder="انتخاب تاریخ و زمان" />
+                <span asp-validation-for="Input.StartDateTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Input.File" class="form-label fw-semibold">فایل یا تصویر (اختیاری)</label>
+                <input asp-for="Input.File" type="file" class="form-control" />
+                <span asp-validation-for="Input.File" class="text-danger"></span>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">ارسال پیشنهاد</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/PersianDatePicker/persian-date.min.js"></script>
+    <script src="~/lib/PersianDatePicker/persian-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#persianDateTime').persianDatepicker({
+                autoClose: true,
+                format: 'YYYY/MM/DD',
+                calendar: {
+                    persian: {
+                        locale: 'fa',
+                        showHint: true,
+                        leapYearMode: 'astronomical'
+                    }
+                },
+                timePicker: {
+                    enabled: true,
+                    second: {
+                        enabled: false
+                    },
+                    minute: {
+                        step: 5
+                    }
+                }
+            });
+        });
+    </script>
+}
