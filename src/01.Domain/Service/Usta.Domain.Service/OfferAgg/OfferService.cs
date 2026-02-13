@@ -1,4 +1,5 @@
-﻿using Usta.Domain.Core.OfferAgg.Contracts;
+﻿using Usta.Domain.Core._common;
+using Usta.Domain.Core.OfferAgg.Contracts;
 using Usta.Domain.Core.OfferAgg.Dtos;
 using Usta.Domain.Core.OfferAgg.Entities;
 using Usta.Framework;
@@ -43,6 +44,11 @@ namespace Usta.Domain.Service.OfferAgg
         public async Task<bool> AcceptOffer(int offerId, CancellationToken cancellationToken)
         {
             return await offerRepository.AcceptOffer(offerId, cancellationToken);
+        }
+
+        public async Task<PagedResult<OfferDto>> GetExpertOffers(int expertId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        {
+            return await offerRepository.GetExpertOffers(expertId, pageNumber, pageSize, search, cancellationToken);
         }
     }
 }

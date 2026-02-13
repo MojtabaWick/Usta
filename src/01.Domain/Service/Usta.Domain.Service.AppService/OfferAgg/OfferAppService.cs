@@ -30,5 +30,10 @@ namespace Usta.Domain.AppService.OfferAgg
 
             return Result<bool>.Failure("نمیتوان پیشنهاد جدید ثبت کرد.");
         }
+
+        public async Task<PagedResult<OfferDto>> GetExpertOffers(int expertId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
+        {
+            return await offerService.GetExpertOffers(expertId, pageNumber, pageSize, search, cancellationToken);
+        }
     }
 }

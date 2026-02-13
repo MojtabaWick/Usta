@@ -18,5 +18,7 @@ namespace Usta.Domain.Core.OfferAgg.Contracts
         public Task<bool> CheckOfferExist(int offerId, CancellationToken cancellationToken);
 
         public Task<bool> AcceptOffer(int offerId, CancellationToken cancellationToken);
+
+        public Task<PagedResult<OfferDto>> GetExpertOffers(int expertId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
     }
 }

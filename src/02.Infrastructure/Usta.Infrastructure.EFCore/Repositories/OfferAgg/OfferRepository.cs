@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Usta.Domain.Core._common;
 using Usta.Domain.Core.OfferAgg.Contracts;
 using Usta.Domain.Core.OfferAgg.Dtos;
 using Usta.Domain.Core.OfferAgg.Entities;
+using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Infrastructure.EFCore.Persistence;
 
 namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
@@ -44,6 +46,45 @@ namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
                 .ExecuteUpdateAsync(setter => setter
                     .SetProperty(o => o.IsAccepted, true), cancellationToken);
             return affcetedRow > 0;
+        }
+
+        public async Task<PagedResult<OfferDto>> GetExpertOffers(int expertId, int pageNumber, int pageSize,
+            string? search, CancellationToken cancellationToken)
+        {
+            var query = dbContext.Offers
+                .AsNoTracking()
+                .Where(o => o.ExpertId == expertId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(o => o.Description != null && o.Description.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .OrderByDescending(p => p.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(o => new OfferDto()
+                {
+                    Id = o.Id,
+                    Description = o.Description,
+                    Price = o.Price,
+                    ExpertId = o.ExpertId,
+                    ExpertName = o.Expert.FirstName + " " + o.Expert.LastName,
+                    ImageUrl = o.ImageUrl,
+                    StartDateTime = o.StartDateTime,
+                    IsAccepted = o.IsAccepted
+                }).ToListAsync(cancellationToken);
+
+            return new PagedResult<OfferDto>()
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
     }
 }
