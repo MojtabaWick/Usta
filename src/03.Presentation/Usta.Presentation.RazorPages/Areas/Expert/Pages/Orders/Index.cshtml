@@ -97,7 +97,12 @@
                                     <td>@(order.EndShamsiDate ?? "نامشخص")</td>
                                     <td>
                                         <span class="badge status-badge text-black">
-                                            @(order.Status == OrderStatus.WaitingForOffers ? "در انتظار پیشنهاد" : "نامشخص")
+                                            @(order.Status switch
+                                            {
+                                                OrderStatus.WaitingForOffers => "در انتظار پیشنهاد",
+                                                OrderStatus.WaitingForAcceptance => "در انتظار قبول کردن پیشنهاد",
+                                                _ => "نامشخص"
+                                            })
                                         </span>
                                     </td>
                                     <td>@order.OffersCount</td>

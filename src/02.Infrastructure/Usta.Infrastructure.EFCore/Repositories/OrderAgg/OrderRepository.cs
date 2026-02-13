@@ -55,7 +55,7 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
         {
             var query = dbContext.Orders
                 .AsNoTracking()
-                .Where(o => expertServices.Contains(o.ProvidedServiceId) && o.Status == OrderStatus.WaitingForOffers);
+                .Where(o => expertServices.Contains(o.ProvidedServiceId) && (o.Status == OrderStatus.WaitingForOffers || o.Status == OrderStatus.WaitingForAcceptance));
 
             if (cityId is not null)
                 query = query.Where(o => o.Customer.CityId == cityId);
@@ -179,6 +179,20 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                     .SetProperty(o => o.Status, OrderStatus.WaitingForPayment), cancellationToken);
 
             return affectedRow > 0;
+        }
+
+        public async Task<bool> SetWaitingForAcceptance(int orderId, CancellationToken cancellationToken)
+        {
+            var affectedRow = await dbContext.Orders.Where(o => o.Id == orderId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(o => o.Status, OrderStatus.WaitingForAcceptance), cancellationToken);
+
+            return affectedRow > 0;
+        }
+
+        public async Task<OrderStatus> GetOrderStatus(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Orders.Where(o => o.Id == orderId).Select(o => o.Status).FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<bool> OrderAcceptOffer(int orderId, int offerId, CancellationToken cancellationToken)

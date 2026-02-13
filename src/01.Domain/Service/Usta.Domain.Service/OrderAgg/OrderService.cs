@@ -86,6 +86,16 @@ namespace Usta.Domain.Service.OrderAgg
             return await orderRepository.SetWaitingForPayment(orderId, cancellationToken);
         }
 
+        public async Task<bool> SetWaitingForAcceptance(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.SetWaitingForAcceptance(orderId, cancellationToken);
+        }
+
+        public async Task<OrderStatus> GetOrderStatus(int orderId, CancellationToken cancellationToken)
+        {
+            return await orderRepository.GetOrderStatus(orderId, cancellationToken);
+        }
+
         public async Task SetDone(int orderId, CancellationToken cancellationToken)
         {
             await orderRepository.SetDone(orderId, cancellationToken);

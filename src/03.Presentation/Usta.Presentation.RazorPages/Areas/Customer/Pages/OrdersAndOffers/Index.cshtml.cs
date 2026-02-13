@@ -42,7 +42,11 @@ namespace Usta.Presentation.RazorPages.Areas.Customer.Pages.OrdersAndOffers
 
         public async Task<IActionResult> OnPostPayOrderAsync(int orderId, CancellationToken cancellationToken)
         {
-            await _orderAppService.PayOrder(orderId, cancellationToken);
+            var result = await _orderAppService.PayOrder(orderId, cancellationToken);
+            if (!result.IsSuccess)
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
             return RedirectToPage("Index");
         }
 

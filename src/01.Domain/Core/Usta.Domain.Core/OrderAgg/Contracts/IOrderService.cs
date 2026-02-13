@@ -3,6 +3,7 @@ using Usta.Domain.Core._common;
 using Usta.Domain.Core.OfferAgg.Entities;
 using Usta.Domain.Core.OrderAgg.Dtos;
 using Usta.Domain.Core.OrderAgg.Entities;
+using Usta.Domain.Core.OrderAgg.Enums;
 
 namespace Usta.Domain.Core.OrderAgg.Contracts
 {
@@ -24,6 +25,10 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
         Task<int> GetCustomerIdByOrderId(int orderId, CancellationToken cancellationToken);
 
         Task<bool> SetWaitingForPayment(int orderId, CancellationToken cancellationToken);
+
+        Task<bool> SetWaitingForAcceptance(int orderId, CancellationToken cancellationToken);
+
+        Task<OrderStatus> GetOrderStatus(int orderId, CancellationToken cancellationToken);
 
         Task SetDone(int orderId, CancellationToken cancellationToken);
 
