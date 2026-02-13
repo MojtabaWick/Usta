@@ -57,9 +57,9 @@
                         <label for="cityId" class="form-label">شهر</label>
                         <select class="form-select" id="cityId" name="cityId">
                             <option value="">همه شهرها</option>
-                            @foreach (var city in Model.cities)
+                            @foreach (var city in Model.Cities)
                             {
-                                <option value="@city.Id" selected="@(Model.cityId == city.Id ? "selected" : null)">@city.Name</option>
+                                <option value="@city.Id" selected="@(Model.CityId == city.Id ? "selected" : null)">@city.Name</option>
                             }
                         </select>
                     </div>
@@ -129,7 +129,7 @@
                         @if (Model.Orders.PageNumber > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" href="?PageNumber=@(Model.Orders.PageNumber - 1)&Search=@Model.Search&cityId=@Model.cityId" aria-label="Previous">
+                                <a class="page-link" href="?PageNumber=@(Model.Orders.PageNumber - 1)&Search=@Model.Search&cityId=@Model.CityId" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -137,13 +137,13 @@
                         @for (int i = 1; i <= Model.Orders.TotalPages; i++)
                         {
                             <li class="page-item @(i == Model.Orders.PageNumber ? "active" : "")">
-                                <a class="page-link" href="?PageNumber=@i&Search=@Model.Search&cityId=@Model.cityId">@i</a>
+                                <a class="page-link" href="?PageNumber=@i&Search=@Model.Search&cityId=@Model.CityId">@i</a>
                             </li>
                         }
                         @if (Model.Orders.PageNumber < Model.Orders.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" href="?PageNumber=@(Model.Orders.PageNumber + 1)&Search=@Model.Search&cityId=@Model.cityId" aria-label="Next">
+                                <a class="page-link" href="?PageNumber=@(Model.Orders.PageNumber + 1)&Search=@Model.Search&cityId=@Model.CityId" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
