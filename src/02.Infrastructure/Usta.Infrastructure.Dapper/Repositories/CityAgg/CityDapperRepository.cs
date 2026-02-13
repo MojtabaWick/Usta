@@ -18,8 +18,8 @@ namespace Usta.Infrastructure.Dapper.Repositories.CityAgg
         public async Task<bool> Add(City newCity, CancellationToken cancellationToken)
         {
             const string sql = """
-            INSERT INTO Cities (Name, CreatedAt)
-            VALUES (@Name, @CreatedAt);
+            INSERT INTO Cities (Name, CreatedAt, IsDeleted)
+        VALUES (@Name, @CreatedAt, 0);
         """;
 
             using var connection = _connectionFactory.CreateConnection();
@@ -37,11 +37,12 @@ namespace Usta.Infrastructure.Dapper.Repositories.CityAgg
         public async Task<bool> Update(CityDto input, CancellationToken cancellationToken)
         {
             const string sql = """
-            UPDATE Cities
-            SET Name = @Name,
-                UpdatedAt = @UpdatedAt
-            WHERE Id = @Id
-        """;
+                                   UPDATE Cities
+                                   SET Name = @Name,
+                                       UpdatedAt = @UpdatedAt
+                                   WHERE Id = @Id
+                                     AND IsDeleted = 0
+                               """;
 
             using var connection = _connectionFactory.CreateConnection();
             var affectedRow = await connection.ExecuteAsync(
@@ -59,10 +60,11 @@ namespace Usta.Infrastructure.Dapper.Repositories.CityAgg
         public async Task<CityDto?> GetById(int id, CancellationToken cancellationToken)
         {
             const string sql = """
-            SELECT Id, Name
-            FROM Cities
-            WHERE Id = @Id
-        """;
+                                   SELECT Id, Name
+                                   FROM Cities
+                                   WHERE Id = @Id
+                                     AND IsDeleted = 0
+                               """;
 
             using var connection = _connectionFactory.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<CityDto>(
@@ -73,9 +75,11 @@ namespace Usta.Infrastructure.Dapper.Repositories.CityAgg
         public async Task<List<CityDto>> GetAllCities(CancellationToken cancellationToken)
         {
             const string sql = """
-            SELECT Id, Name
-            FROM Cities
-        """;
+                                   SELECT Id, Name
+                                   FROM Cities
+                                   WHERE IsDeleted = 0
+                                   ORDER BY Id
+                               """;
 
             using var connection = _connectionFactory.CreateConnection();
             var result = await connection.QueryAsync<CityDto>(sql);

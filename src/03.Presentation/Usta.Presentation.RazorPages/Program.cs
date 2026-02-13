@@ -29,7 +29,9 @@ using Usta.Infrastructure.Cache.Contracts;
 using Usta.Infrastructure.Cache.InMemoryCache;
 using Usta.Infrastructure.Dapper.Persistence.Contracts;
 using Usta.Infrastructure.Dapper.Persistence.SqlServer;
+using Usta.Infrastructure.Dapper.Repositories.CategoryAgg;
 using Usta.Infrastructure.Dapper.Repositories.CityAgg;
+using Usta.Infrastructure.Dapper.Repositories.ProvidedServiceAgg;
 using Usta.Infrastructure.EFCore.Persistence;
 using Usta.Infrastructure.EFCore.Repositories.CategoryAgg;
 using Usta.Infrastructure.EFCore.Repositories.CityAgg;
@@ -150,6 +152,9 @@ builder.Services.AddScoped<IOfferService, OfferService>();
 builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 
 builder.Services.AddScoped<ICacheService, InMemoryCacheService>();
+
+builder.Services.AddScoped<ICategoryDapperRepository, CategoryDapperRepository>();
+builder.Services.AddScoped<IProvidedServiceDapperRepository, ProvidedServiceDapperRepository>();
 
 #endregion RegisterService
 

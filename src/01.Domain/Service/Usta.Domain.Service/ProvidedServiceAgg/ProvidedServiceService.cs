@@ -13,13 +13,14 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 {
     public class ProvidedServiceService(IProvidedServiceRepository providedServiceRepository,
         IFileService _fileService,
-        ICacheService _cacheService) : IProvidedServiceService
+        ICacheService _cacheService,
+        IProvidedServiceDapperRepository psDapperRepository) : IProvidedServiceService
     {
         private readonly string PicFolder = "ProvidedServices";
 
         public async Task<List<ProfileProvidedServiceDto>> GetAllForProfileAsync(CancellationToken cancellationToken)
         {
-            return await providedServiceRepository.GetAllForProfileAsync(cancellationToken);
+            return await psDapperRepository.GetAllForProfileAsync(cancellationToken);
         }
 
         public async Task<List<ProvidedService>> GetByListIdsAsync(List<int> serviceIds, CancellationToken cancellationToken)
@@ -34,7 +35,7 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
             if (services is null)
             {
-                services = await providedServiceRepository.GetAllProvidedServiceForAdmin(pageNumber, pageSize, search, cancellationToken);
+                services = await psDapperRepository.GetAllProvidedServiceForAdmin(pageNumber, pageSize, search, cancellationToken);
                 _cacheService.Set(cacheKey, services, 10);
             }
 
@@ -48,7 +49,7 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
             if (services is null)
             {
-                services = await providedServiceRepository.GetAllProvidedService(pageNumber, pageSize, search, cancellationToken);
+                services = await psDapperRepository.GetAllProvidedService(pageNumber, pageSize, search, cancellationToken);
                 _cacheService.SetSliding(cacheKey, services, 5);
             }
 
@@ -69,7 +70,7 @@ namespace Usta.Domain.Service.ProvidedServiceAgg
 
             if (services is null)
             {
-                services = await providedServiceRepository.GetAllProvidedServiceByCategory(categoryId, pageNumber, pageSize,
+                services = await psDapperRepository.GetAllProvidedServiceByCategory(categoryId, pageNumber, pageSize,
                     search, cancellationToken);
                 _cacheService.SetSliding(cacheKey, services, 5);
             }

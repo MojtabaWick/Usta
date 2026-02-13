@@ -12,11 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\CategoryAgg\" />
-    <Folder Include="Repositories\ProvidedServiceAgg\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\01.Domain\Core\Usta.Domain.Core\Usta.Domain.Core.csproj" />
   </ItemGroup>
 

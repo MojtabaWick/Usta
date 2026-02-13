@@ -12,7 +12,10 @@ using Usta.Infrastructure.FileService.Contracts;
 
 namespace Usta.Domain.Service.CategoryAgg
 {
-    public class CategoryService(ICategoryRepository categoryRepo, IFileService fileService, ICacheService cacheService) : ICategoryService
+    public class CategoryService(ICategoryRepository categoryRepo,
+        IFileService fileService,
+        ICacheService cacheService,
+        ICategoryDapperRepository categoryDapperRepository) : ICategoryService
     {
         private readonly string _categoriesFolder = "Categories";
 
@@ -36,7 +39,7 @@ namespace Usta.Domain.Service.CategoryAgg
             var categories = cacheService.Get<List<CategoryDto>?>(CacheKeys.Categories);
             if (categories is null)
             {
-                categories = await categoryRepo.GetAllCategories(cancellationToken);
+                categories = await categoryDapperRepository.GetAllCategories(cancellationToken);
                 cacheService.SetSliding(CacheKeys.Categories, categories, 10);
             }
 
@@ -64,7 +67,7 @@ namespace Usta.Domain.Service.CategoryAgg
 
         public async Task<List<CategorySelectDto>> GetCategoriesForSelect(CancellationToken cancellationToken)
         {
-            return await categoryRepo.GetCategoriesForSelect(cancellationToken);
+            return await categoryDapperRepository.GetCategoriesForSelect(cancellationToken);
         }
 
         public async Task<bool> UpdateAsync(CategoryEditDto input, CancellationToken cancellationToken)
