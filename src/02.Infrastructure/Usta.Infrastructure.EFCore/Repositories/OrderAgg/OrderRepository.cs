@@ -50,6 +50,53 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                 }).FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<PagedResult<OrderDto>> GetOrdersForExpert(List<int> expertServices, int? cityId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            var query = dbContext.Orders
+                .AsNoTracking()
+                .Where(o => expertServices.Contains(o.ProvidedServiceId) && o.Status == OrderStatus.WaitingForOffers);
+
+            if (cityId is not null)
+                query = query.Where(o => o.Customer.CityId == cityId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(o =>
+                    o.ProvidedService.Title.Contains(search) ||
+                    (o.ProvidedService.Description != null && o.ProvidedService.Description.Contains(search)) ||
+                    o.Description.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .OrderByDescending(u => u.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(o => new OrderDto()
+                {
+                    Id = o.Id,
+                    CustomerFullName = o.Customer.FirstName + " " + o.Customer.LastName,
+                    Description = o.Description,
+                    Images = o.Images,
+                    Status = o.Status,
+                    StartDateTime = o.StartDateTime,
+                    EndDateTime = o.EndDateTime,
+                    StartShamsiDate = o.StartDateTime.ToPersianDate(),
+                    EndShamsiDate = o.EndDateTime.HasValue ? o.EndDateTime.Value.ToPersianDate() : "-",
+                    OffersCount = o.Offers.Count,
+                }).ToListAsync(cancellationToken);
+
+            return new PagedResult<OrderDto>
+            {
+                Items = items,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
+        }
+
         public async Task<PagedResult<OrderAndOfferDto>> GetCustomerOrders(int customerId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             var query = dbContext.Orders

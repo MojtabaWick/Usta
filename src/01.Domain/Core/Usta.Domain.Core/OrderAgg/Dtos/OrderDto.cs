@@ -12,7 +12,7 @@ namespace Usta.Domain.Core.OrderAgg.Dtos
         public DateTime? EndDateTime { get; set; }
         public string? StartShamsiDate { get; set; }
         public string? EndShamsiDate { get; set; }
-        public OrderStatus Status { get; set; } = OrderStatus.WaitingForOffers;
+        public OrderStatus Status { get; set; }
         public int OffersCount { get; set; }
         public List<OrderImage> Images { get; set; } = [];
     }

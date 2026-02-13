@@ -8,11 +8,19 @@ using Usta.Infrastructure.FileService.Contracts;
 
 namespace Usta.Domain.Service.OrderAgg
 {
-    public class OrderService(IOrderRepository orderRepository, IOrderImagesRepository orderImagesRepository, IFileService fileService) : IOrderService
+    public class OrderService(IOrderRepository orderRepository,
+        IOrderImagesRepository orderImagesRepository,
+        IFileService fileService) : IOrderService
     {
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             return await orderRepository.GetAllOrders(pageNumber, pageSize, search, cancellationToken);
+        }
+
+        public async Task<PagedResult<OrderDto>> GetOrdersForExpert(List<int> expertServices, int? cityId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            return await orderRepository.GetOrdersForExpert(expertServices, cityId, pageNumber, pageSize, search, cancellationToken);
         }
 
         public async Task<bool> CreateOrder(CreateOrderDto dto, int customerId, CancellationToken cancellationToken)

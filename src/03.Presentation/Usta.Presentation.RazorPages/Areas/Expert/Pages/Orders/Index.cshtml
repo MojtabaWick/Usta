@@ -1,0 +1,164 @@
+﻿@page
+@using Usta.Domain.Core.OrderAgg.Enums
+@model Usta.Presentation.RazorPages.Areas.Expert.Pages.Orders.IndexModel
+@{
+    ViewData["Title"] = "سفارشات";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Tahoma', sans-serif;
+    }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .img-thumbnail {
+        max-width: 50px;
+        margin-right: 5px;
+    }
+
+    .status-badge {
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">لیست سفارشات</h4>
+        </div>
+        <div class="card-body">
+            <form method="get" class="mb-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="Search" class="form-label">جستجو</label>
+                        <input type="text" class="form-control" id="Search" name="Search" value="@Model.Search" placeholder="جستجو بر اساس نام مشتری یا توضیحات...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="cityId" class="form-label">شهر</label>
+                        <select class="form-select" id="cityId" name="cityId">
+                            <option value="">همه شهرها</option>
+                            @foreach (var city in Model.cities)
+                            {
+                                <option value="@city.Id" selected="@(Model.cityId == city.Id ? "selected" : null)">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">اعمال فیلتر</button>
+                    </div>
+                </div>
+            </form>
+
+            @if (Model.Orders.Items.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>نام مشتری</th>
+                                <th>توضیحات</th>
+                                <th>تاریخ شروع (شمسی)</th>
+                                <th>تاریخ پایان (شمسی)</th>
+                                <th>وضعیت</th>
+                                <th>تعداد پیشنهادها</th>
+                                <th>تصاویر</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.Orders.Items)
+                            {
+                                <tr>
+                                    <td>@order.Id</td>
+                                    <td>@order.CustomerFullName</td>
+                                    <td>@order.Description</td>
+                                    <td>@order.StartShamsiDate</td>
+                                    <td>@(order.EndShamsiDate ?? "نامشخص")</td>
+                                    <td>
+                                        <span class="badge status-badge text-black">
+                                            @(order.Status == OrderStatus.WaitingForOffers ? "در انتظار پیشنهاد" : "نامشخص")
+                                        </span>
+                                    </td>
+                                    <td>@order.OffersCount</td>
+                                    <td>
+                                        @if (order.Images.Any())
+                                        {
+                                            foreach (var image in order.Images)
+                                            {
+                                                <img src="@image.ImageUrl" alt="تصویر سفارش" class="img-thumbnail" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>بدون تصویر</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/Expert/Offer/CreateOffer?orderId=@order.Id" class="btn btn-sm btn-success">ارسال پیشنهاد</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        @if (Model.Orders.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?PageNumber=@(Model.Orders.PageNumber - 1)&Search=@Model.Search&cityId=@Model.cityId" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= Model.Orders.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.Orders.PageNumber ? "active" : "")">
+                                <a class="page-link" href="?PageNumber=@i&Search=@Model.Search&cityId=@Model.cityId">@i</a>
+                            </li>
+                        }
+                        @if (Model.Orders.PageNumber < Model.Orders.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?PageNumber=@(Model.Orders.PageNumber + 1)&Search=@Model.Search&cityId=@Model.cityId" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+            else
+            {
+                <div class="alert alert-info text-center">
+                    هیچ سفارشی یافت نشد.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

@@ -434,6 +434,15 @@ namespace Usta.Domain.Service.UserAgg
             }
         }
 
+        public async Task<List<int>> GetExpertProvidedServicesIds(int expertId, CancellationToken cancellationToken)
+        {
+            return await _userManager.Users
+                .OfType<Expert>()
+                .Where(u => u.Id == expertId)
+                .SelectMany(e => e.ProvidedServices.Select(p => p.Id))
+                .ToListAsync(cancellationToken);
+        }
+
         private async Task<List<int>> GetServiceIdsByUserId(int userId, CancellationToken cancellationToken)
         {
             return await _userManager.Users

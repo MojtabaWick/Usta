@@ -47,6 +47,7 @@ builder.Services.AddRazorPages(options =>
     {
         options.Conventions.AuthorizeAreaFolder("Admin", "/", "AdminPolicy");
         options.Conventions.AuthorizeAreaFolder("Customer", "/", "CustomerPolicy");
+        options.Conventions.AuthorizeAreaFolder("Expert", "/", "ExpertPolicy");
     })
     .AddRazorRuntimeCompilation();
 
@@ -57,6 +58,9 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("CustomerPolicy", policy =>
         policy.RequireRole("Customer"));
+
+    options.AddPolicy("ExpertPolicy", policy =>
+        policy.RequireRole("Expert"));
 });
 
 #region Logging

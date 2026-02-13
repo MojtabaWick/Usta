@@ -12,37 +12,39 @@ namespace Usta.Domain.Core.UserAgg.Contracts
 {
     public interface IUserService
     {
-        public Task<IdentityResult> RegisterUserAsync(UserRegisterInputDto userDto, CancellationToken cancellationToken);
+        Task<IdentityResult> RegisterUserAsync(UserRegisterInputDto userDto, CancellationToken cancellationToken);
 
-        public Task<SignInResult> LoginUserAsync(string userName, string password);
+        Task<SignInResult> LoginUserAsync(string userName, string password);
 
-        public Task<IdentityResult> ChangePasswordWithAdmin(int userId, string password);
+        Task<IdentityResult> ChangePasswordWithAdmin(int userId, string password);
 
-        public Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword);
+        Task<IdentityResult> ChangePasswordWithUser(int userId, string oldPassword, string newPassword);
 
-        public Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
+        Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
 
-        public Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search,
-            UserType? userType, CancellationToken cancellationToken);
+        Task<PagedResult<UserDto>> GetAllUsersAsync(int pageNumber, int pageSize, string? search,
+           UserType? userType, CancellationToken cancellationToken);
 
-        public Task<bool> UpdateUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken);
+        Task<bool> UpdateUserAsync(int userId, UserEditInputDto userDto, CancellationToken cancellationToken);
 
-        public Task<UserDto?> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken);
+        Task<UserDto?> GetExpertUserWithServicesAsync(int userId, CancellationToken cancellationToken);
 
-        public Task<bool> UpdateExpertServices(int userId, List<int> newServiceIds, CancellationToken cancellationToken);
+        Task<bool> UpdateExpertServices(int userId, List<int> newServiceIds, CancellationToken cancellationToken);
 
-        public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(int id, CancellationToken cancellationToken);
 
-        public Task<AdminUserEditDto> GetUserForAdminEditAsync(int userId, CancellationToken cancellationToken);
+        Task<AdminUserEditDto> GetUserForAdminEditAsync(int userId, CancellationToken cancellationToken);
 
-        public Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken ct);
+        Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken ct);
 
-        public Task<bool> CheckUserProfile(int customerId, CancellationToken cancellationToken);
+        Task<bool> CheckUserProfile(int customerId, CancellationToken cancellationToken);
 
-        public Task<bool> CheckUserWalletBalance(int customerId, decimal price, CancellationToken cancellationToken);
+        Task<bool> CheckUserWalletBalance(int customerId, decimal price, CancellationToken cancellationToken);
 
-        public Task DecreaseWallet(int customerId, decimal price, CancellationToken cancellationToken);
+        Task DecreaseWallet(int customerId, decimal price, CancellationToken cancellationToken);
 
-        public Task IncreaseWallet(int expertId, decimal price, CancellationToken cancellationToken);
+        Task IncreaseWallet(int expertId, decimal price, CancellationToken cancellationToken);
+
+        Task<List<int>> GetExpertProvidedServicesIds(int expertId, CancellationToken cancellationToken);
     }
 }

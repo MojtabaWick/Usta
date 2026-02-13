@@ -10,6 +10,8 @@ namespace Usta.Domain.Core.OrderAgg.Contracts
     {
         Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
 
+        Task<PagedResult<OrderDto>> GetOrdersForExpert(int expertId, int? cityId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken);
+
         Task<Result<bool>> CreateOrder(CreateOrderDto dto, int customerId, CancellationToken cancellationToken);
 
         Task<PagedResult<OrderAndOfferDto>> GetCustomerOrders(int customerId, int pageNumber, int pageSize,

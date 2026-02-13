@@ -8,11 +8,22 @@ using Usta.Domain.Core.UserAgg.Contracts;
 
 namespace Usta.Domain.AppService.OrderAgg
 {
-    public class OrderAppService(IOrderService orderService, IOfferService offerService, IUserService userService, ILogger<OrderAppService> _logger) : IOrderAppService
+    public class OrderAppService(IOrderService orderService,
+        IOfferService offerService, IUserService userService,
+        ILogger<OrderAppService> _logger)
+        : IOrderAppService
     {
         public async Task<PagedResult<OrderDto>> GetAllOrders(int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             return await orderService.GetAllOrders(pageNumber, pageSize, search, cancellationToken);
+        }
+
+        public async Task<PagedResult<OrderDto>> GetOrdersForExpert(int expertId, int? cityId, int pageNumber, int pageSize, string? search,
+            CancellationToken cancellationToken)
+        {
+            var expertProvidedServicesIds = await userService.GetExpertProvidedServicesIds(expertId, cancellationToken);
+
+            return await orderService.GetOrdersForExpert(expertProvidedServicesIds, cityId, pageNumber, pageSize, search, cancellationToken);
         }
 
         public async Task<Result<bool>> CreateOrder(CreateOrderDto dto, int customerId, CancellationToken cancellationToken)
