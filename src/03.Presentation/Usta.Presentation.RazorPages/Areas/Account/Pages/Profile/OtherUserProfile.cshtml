@@ -1,0 +1,107 @@
+﻿@page
+@model Usta.Presentation.RazorPages.Areas.Account.Pages.Profile.OtherUserProfileModel
+@{
+    ViewData["Title"] = "پروفایل کارشناس";
+}
+<style>
+    .card-header.bg-gradient {
+        background: linear-gradient(135deg, #007bff, #00c6ff) !important;
+    }
+
+    .card.border-primary {
+        transition: transform 0.2s;
+    }
+
+        .card.border-primary:hover {
+            transform: scale(1.02);
+        }
+
+    .bi-star-fill, .bi-star {
+        font-size: 1.2rem;
+    }
+</style>
+<div class="container py-5" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+                <!-- هدر پروفایل با گرادینت پس‌زمینه -->
+                <div class="card-header bg-gradient bg-primary text-white text-center py-5 position-relative" style="min-height: 200px;">
+                    @if (!string.IsNullOrEmpty(Model.Expert.ImageUrl))
+                    {
+                        <img src="@Model.Expert.ImageUrl" alt="تصویر پروفایل" class="rounded-circle border border-4 border-white position-absolute bottom-0 start-50 translate-middle-x" style="width: 120px; height: 120px; object-fit: cover; transform: translate(-50%, 50%);">
+                    }
+                    else
+                    {
+                        <div class="rounded-circle bg-light border border-4 border-white position-absolute bottom-0 start-50 translate-middle-x d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; font-size: 2rem; transform: translate(-50%, 50%);">
+                            <i class="bi bi-person-circle text-primary"></i>
+                        </div>
+                    }
+                    <h3 class="mb-0">@Model.Expert.FirstName @Model.Expert.LastName</h3>
+                    <p class="mb-0"><i class="bi bi-geo-alt me-1"></i>@Model.Expert.CityName</p>
+                </div>
+                <!-- بدنه پروفایل -->
+                <div class="card-body pt-5 pb-4">
+                    <div class="text-center mb-4">
+                        <p class="text-muted"><i class="bi bi-envelope me-1"></i>@Model.Expert.Email</p>
+                        <p class="text-muted"><i class="bi bi-phone me-1"></i>@Model.Expert.PhoneNumber</p>
+                    </div>
+                    <!-- بخش خدمات -->
+                    <h5 class="fw-bold text-primary mb-3">خدمات ارائه شده</h5>
+                    @if (Model.Expert.Services.Any())
+                    {
+                        <div class="row g-3">
+                            @foreach (var service in Model.Expert.Services)
+                            {
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100 shadow-sm">
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title">@service.Title</h6>
+                                            <!-- اگر جزئیات بیشتری داشت، اضافه کنید -->
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">هیچ خدمتی ثبت نشده است.</p>
+                    }
+                    <!-- بخش کامنت‌ها -->
+                    <h5 class="fw-bold text-primary mt-5 mb-3">آخرین نظرات کاربران</h5>
+                    @if (Model.Expert.Comments.Any())
+                    {
+                        @foreach (var comment in Model.Expert.Comments)
+                        {
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <span class="text-warning me-2">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= comment.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star"></i>
+                                                }
+                                            }
+                                        </span>
+                                        <small class="text-muted">#@comment.Id</small>
+                                    </div>
+                                </div>
+                                <p class="mt-2">@comment.Text</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">هنوز نظری ثبت نشده است.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

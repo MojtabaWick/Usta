@@ -37,5 +37,7 @@ namespace Usta.Domain.Core.UserAgg.Contracts
         public Task<AdminUserEditDto> GetUserForAdminEditAsync(int userId, CancellationToken cancellationToken);
 
         public Task<Result<bool>> AdminEditUserAsync(int userId, AdminUserEditDto input, CancellationToken ct);
+
+        public Task<ExpertProfileSummeryDto> GetExpertSummeryProfile(int expertId, CancellationToken cancellationToken);
     }
 }

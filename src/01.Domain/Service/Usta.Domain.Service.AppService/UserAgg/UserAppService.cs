@@ -173,5 +173,17 @@ namespace Usta.Domain.AppService.UserAgg
         {
             return await userService.AdminEditUserAsync(userId, input, cancellationToken);
         }
+
+        public async Task<ExpertProfileSummeryDto> GetExpertSummeryProfile(int expertId, CancellationToken cancellationToken)
+        {
+            var expertProfileSummery = await userService.GetExpertSummeryProfile(expertId, cancellationToken);
+
+            if (expertProfileSummery is null)
+            {
+                throw new Exception($"Expert profile with id:{expertId} not found. ");
+            }
+
+            return expertProfileSummery;
+        }
     }
 }

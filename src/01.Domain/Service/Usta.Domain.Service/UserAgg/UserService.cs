@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Usta.Domain.Core._common;
+using Usta.Domain.Core.CommentAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Contracts;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Domain.Core.ProvidedServiceAgg.Entities;
@@ -441,6 +442,34 @@ namespace Usta.Domain.Service.UserAgg
                 .Where(u => u.Id == expertId)
                 .SelectMany(e => e.ProvidedServices.Select(p => p.Id))
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<ExpertProfileSummeryDto?> GetExpertSummeryProfile(int expertId, CancellationToken cancellationToken)
+        {
+            return await _userManager.Users
+                .OfType<Expert>()
+                .Where(u => u.Id == expertId)
+                .Select(u => new ExpertProfileSummeryDto()
+                {
+                    Id = u.Id,
+                    Email = u.Email ?? " ",
+                    CityName = u.City != null ? u.City.Name : "",
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    ImageUrl = u.ImageUrl,
+                    PhoneNumber = u.PhoneNumber,
+                    Comments = u.Comments.Where(c => c.IsApproved == true).Select(c => new CommentDto()
+                    {
+                        Id = c.Id,
+                        Text = c.Text,
+                        Rating = c.Rating,
+                    }).OrderByDescending(c => c.Id).Take(5).ToList(),
+                    Services = u.ProvidedServices.Select(ps => new ProfileProvidedServiceDto()
+                    {
+                        Id = ps.Id,
+                        Title = ps.Title,
+                    }).ToList()
+                }).FirstOrDefaultAsync(cancellationToken);
         }
 
         private async Task<List<int>> GetServiceIdsByUserId(int userId, CancellationToken cancellationToken)

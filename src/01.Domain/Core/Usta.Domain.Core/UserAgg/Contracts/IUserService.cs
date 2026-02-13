@@ -46,5 +46,7 @@ namespace Usta.Domain.Core.UserAgg.Contracts
         Task IncreaseWallet(int expertId, decimal price, CancellationToken cancellationToken);
 
         Task<List<int>> GetExpertProvidedServicesIds(int expertId, CancellationToken cancellationToken);
+
+        Task<ExpertProfileSummeryDto?> GetExpertSummeryProfile(int expertId, CancellationToken cancellationToken);
     }
 }

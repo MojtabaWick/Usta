@@ -1,11 +1,9 @@
 ﻿@page
 @model Usta.Presentation.RazorPages.Areas.Customer.Pages.OrdersAndOffers.IndexModel
 @using Usta.Domain.Core.OrderAgg.Enums
-
 @{
     ViewData["Title"] = "سفارشات و پیشنهادات من";
 }
-
 <div class="container py-5" dir="rtl">
     @if (TempData["SuccessMessage"] != null)
     {
@@ -16,11 +14,10 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-primary">سفارشات من</h2>
     </div>
-
     <!-- جستجو -->
     <form method="get" class="mb-4">
         <div class="input-group">
-            <input type="text" asp-for="Search" class="form-control" placeholder="جستجو در عنوان خدمت یا توضیحات سفارش..."/>
+            <input type="text" asp-for="Search" class="form-control" placeholder="جستجو در عنوان خدمت یا توضیحات سفارش..." />
             <button type="submit" class="btn btn-outline-primary">جستجو</button>
             @if (!string.IsNullOrEmpty(Model.Search))
             {
@@ -28,7 +25,6 @@
             }
         </div>
     </form>
-
     @if (!Model.OrdersAndOffers.Items.Any())
     {
         <div class="alert alert-info text-center">هنوز سفارشی ثبت نکرده‌اید.</div>
@@ -47,13 +43,11 @@
                         @GetPersianStatus(order.Status)
                     </span>
                 </div>
-
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
                             <h5 class="card-title">@order.ProvidedServiceTitle</h5>
                             <p class="text-muted">@order.Description</p>
-
                             <div class="d-flex gap-4 text-muted small">
                                 <div>
                                     <i class="bi bi-calendar"></i>
@@ -65,7 +59,6 @@
                                 </div>
                             </div>
                         </div>
-
                         @if (order.Images?.Any() == true)
                         {
                             <div class="col-md-4">
@@ -83,7 +76,6 @@
                         }
                     </div>
                 </div>
-
                 <div class="card-footer bg-white d-flex flex-wrap gap-2">
                     <!-- دکمه مشاهده پیشنهادات -->
                     <button class="btn btn-primary" type="button"
@@ -92,41 +84,37 @@
                         <i class="bi bi-list-check"></i>
                         پیشنهادات (@order.OffersCount)
                     </button>
-
                     <!-- دکمه انجام شد -->
                     @if (order.Status == OrderStatus.InProgress)
                     {
                         <form asp-page-handler="SetDone" method="post" class="d-inline">
-                            <input type="hidden" name="orderId" value="@order.Id"/>
+                            <input type="hidden" name="orderId" value="@order.Id" />
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-check-circle"></i> انجام شد
                             </button>
                         </form>
                     }
-
                     <!-- دکمه پرداخت -->
                     @if (order.Status == OrderStatus.WaitingForPayment)
                     {
                         <form asp-page-handler="PayOrder" method="post" class="d-inline">
-                            <input type="hidden" name="orderId" value="@order.Id"/>
+                            <input type="hidden" name="orderId" value="@order.Id" />
                             <button type="submit" class="btn btn-warning text-white">
                                 <i class="bi bi-credit-card"></i> پرداخت کن
                             </button>
                         </form>
                     }
-
                     <!-- دکمه نظر دادن به کارشناس -->
                     @if (order.Status == OrderStatus.Completed)
                     {
                         <form asp-page-handler="CreateComment" method="post" class="d-inline">
-                            <input type="hidden" name="orderId" value="@order.Id"/>
+                            <input type="hidden" name="orderId" value="@order.Id" />
                             <button type="submit" class="btn btn-info text-white">
                                 <i class="bi bi-chat-dots-fill"></i> نظر دادن به کارشناس
                             </button>
                         </form>
                     }
                 </div>
-
                 <!-- بخش پیشنهادات (Collapse) -->
                 <div class="collapse" id="offers-@order.Id">
                     <div class="card-body border-top pt-4">
@@ -141,7 +129,15 @@
                                 <div class="border rounded p-3 mb-3 @(offer.IsAccepted ? "border-success bg-success bg-opacity-10" : "")">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <h6 class="mb-1">@offer.ExpertName</h6>
+                                            <h6 class="mb-1">
+                                                @offer.ExpertName
+                                                <a asp-area="Account"
+                                                   asp-page="/Profile/OtherUserProfile"
+                                                   asp-route-userId="@offer.ExpertId"
+                                                   class="ms-2 text-primary small">
+                                                    (دیدن پروفایل)
+                                                </a>
+                                            </h6>
                                             <span class="text-primary fw-bold">@offer.Price.ToString("N0") تومان</span>
                                         </div>
                                         @if (offer.IsAccepted)
@@ -150,13 +146,12 @@
                                         }
                                     </div>
                                     <p class="text-muted small mt-2">@offer.Description</p>
-
                                     <!-- دکمه قبول کردن پیشنهاد فقط وقتی وضعیت در انتظار قبول کردن باشه -->
                                     @if (order.Status == OrderStatus.WaitingForAcceptance && !offer.IsAccepted)
                                     {
                                         <form asp-page-handler="AcceptOffer" method="post" class="mt-2">
-                                            <input type="hidden" name="orderId" value="@order.Id"/>
-                                            <input type="hidden" name="offerId" value="@offer.Id"/>
+                                            <input type="hidden" name="orderId" value="@order.Id" />
+                                            <input type="hidden" name="offerId" value="@offer.Id" />
                                             <button type="submit" class="btn btn-outline-success btn-sm">
                                                 قبول کردن این پیشنهاد
                                             </button>
@@ -169,7 +164,6 @@
                 </div>
             </div>
         }
-
         <!-- پیجینیشن -->
         @if (Model.OrdersAndOffers.TotalCount > Model.OrdersAndOffers.PageSize)
         {
@@ -179,14 +173,12 @@
                     <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
                         <a class="page-link" href="?PageNumber=@(Model.PageNumber - 1)&Search=@Model.Search">قبلی</a>
                     </li>
-
                     @for (int i = 1; i <= totalPages; i++)
                     {
                         <li class="page-item @(i == Model.PageNumber ? "active" : "")">
                             <a class="page-link" href="?PageNumber=@i&Search=@Model.Search">@i</a>
                         </li>
                     }
-
                     <li class="page-item @(Model.PageNumber == totalPages ? "disabled" : "")">
                         <a class="page-link" href="?PageNumber=@(Model.PageNumber + 1)&Search=@Model.Search">بعدی</a>
                     </li>
@@ -195,29 +187,27 @@
         }
     }
 </div>
-
 @functions {
     public string GetPersianStatus(OrderStatus status) => status switch
     {
-        OrderStatus.Cancelled              => "لغو شده",
-        OrderStatus.Completed              => "انجام شده",
-        OrderStatus.WaitingForOffers       => "در انتظار دریافت پیشنهاد",
-        OrderStatus.WaitingForAcceptance   => "در انتظار قبول کردن پیشنهاد",
-        OrderStatus.InProgress             => "در حال انجام",
-        OrderStatus.WaitingForPayment      => "در انتظار پرداخت",
-        OrderStatus.Paid                   => "پرداخت شده",
+        OrderStatus.Cancelled => "لغو شده",
+        OrderStatus.Completed => "انجام شده",
+        OrderStatus.WaitingForOffers => "در انتظار دریافت پیشنهاد",
+        OrderStatus.WaitingForAcceptance => "در انتظار قبول کردن پیشنهاد",
+        OrderStatus.InProgress => "در حال انجام",
+        OrderStatus.WaitingForPayment => "در انتظار پرداخت",
+        OrderStatus.Paid => "پرداخت شده",
         _ => status.ToString()
     };
-
     public string GetStatusBadgeClass(OrderStatus status) => status switch
     {
-        OrderStatus.Cancelled              => "bg-danger text-white",
-        OrderStatus.Completed              => "bg-success text-white",
-        OrderStatus.WaitingForOffers       => "bg-info text-white",
-        OrderStatus.WaitingForAcceptance   => "bg-warning text-dark",
-        OrderStatus.InProgress             => "bg-primary text-white",
-        OrderStatus.WaitingForPayment      => "bg-secondary text-white",
-        OrderStatus.Paid                   => "bg-success text-white",
+        OrderStatus.Cancelled => "bg-danger text-white",
+        OrderStatus.Completed => "bg-success text-white",
+        OrderStatus.WaitingForOffers => "bg-info text-white",
+        OrderStatus.WaitingForAcceptance => "bg-warning text-dark",
+        OrderStatus.InProgress => "bg-primary text-white",
+        OrderStatus.WaitingForPayment => "bg-secondary text-white",
+        OrderStatus.Paid => "bg-success text-white",
         _ => "bg-light text-dark"
     };
 }
