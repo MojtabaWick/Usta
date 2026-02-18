@@ -1,4 +1,5 @@
 ﻿using Usta.Domain.Core._common;
+using Usta.Domain.Core.OfferAgg.Enums;
 using Usta.Domain.Core.OrderAgg.Entities;
 using Usta.Domain.Core.UserAgg.Entities;
 
@@ -13,6 +14,8 @@ namespace Usta.Domain.Core.OfferAgg.Entities
         public string? ImageUrl { get; set; }
         public DateTime StartDateTime { get; set; }
         public bool IsAccepted { get; set; }
+
+        public OfferStatus Status { get; set; } = OfferStatus.WaitingForAccept;
 
         #endregion Properties
 

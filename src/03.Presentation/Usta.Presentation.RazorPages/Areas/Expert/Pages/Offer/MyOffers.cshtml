@@ -1,4 +1,6 @@
 ﻿@page
+@using Usta.Domain.Core.OfferAgg.Enums
+@using Usta.Framework
 @model Usta.Presentation.RazorPages.Areas.Expert.Pages.Offer.MyOffersModel
 @{
     ViewData["Title"] = "پیشنهادهای من";
@@ -23,6 +25,11 @@
 
     .pending-badge {
         background-color: #ffc107;
+        color: black;
+    }
+
+    .rejected-badge {
+        background-color: red;
         color: black;
     }
 </style>
@@ -57,13 +64,17 @@
                         <div class="d-flex justify-content-between">
                             <h5>@offer.Price.ToString("N0") تومان</h5>
 
-                            @if (offer.IsAccepted)
+                            @if (offer.IsAccepted && offer.Status == OfferStatus.Accepted)
                             {
                                 <span class="badge accepted-badge">قبول شده</span>
                             }
-                            else
+                            @if(offer.Status == OfferStatus.WaitingForAccept)
                             {
                                 <span class="badge pending-badge">در انتظار تایید</span>
+                            }
+                            @if(offer.Status == OfferStatus.Rejected)
+                            {
+                                <span class="badge rejected-badge">رد شده</span>
                             }
                         </div>
 
@@ -72,7 +83,7 @@
                         </p>
 
                         <div class="small text-secondary">
-                            تاریخ شروع: @offer.StartDateTime.ToString("yyyy/MM/dd")
+                            تاریخ شروع: @offer.StartDateTime.ToPersianDate()
                         </div>
 
                     </div>

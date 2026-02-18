@@ -74,6 +74,7 @@ namespace Usta.Domain.AppService.OrderAgg
             if (acceptResult)
             {
                 var offerIsAccepted = await offerService.AcceptOffer(offerId, cancellationToken);
+                var setOtherOffersRejected = await offerService.RejectOtherOffers(orderId, offerId, cancellationToken);
                 if (offerIsAccepted)
                 {
                     return Result<bool>.Success("پیشنهاد با موفقیت تایید شد.");

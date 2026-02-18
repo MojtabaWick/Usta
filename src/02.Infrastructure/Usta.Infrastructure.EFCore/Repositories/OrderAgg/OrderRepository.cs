@@ -139,7 +139,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.OrderAgg
                         ExpertName = offer.Expert.FirstName + " " + offer.Expert.LastName,
                         ImageUrl = offer.ImageUrl,
                         IsAccepted = offer.IsAccepted,
-                        StartDateTime = offer.StartDateTime
+                        StartDateTime = offer.StartDateTime,
+                        Status = offer.Status,
                     }).ToList()
                 }).ToListAsync(cancellationToken);
 

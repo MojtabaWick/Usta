@@ -3,6 +3,7 @@ using Usta.Domain.Core._common;
 using Usta.Domain.Core.OfferAgg.Contracts;
 using Usta.Domain.Core.OfferAgg.Dtos;
 using Usta.Domain.Core.OfferAgg.Entities;
+using Usta.Domain.Core.OfferAgg.Enums;
 using Usta.Domain.Core.ProvidedServiceAgg.Dtos;
 using Usta.Infrastructure.EFCore.Persistence;
 
@@ -31,7 +32,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
                       ExpertName = o.Expert.FirstName + " " + o.Expert.LastName,
                       ImageUrl = o.ImageUrl,
                       StartDateTime = o.StartDateTime,
-                      IsAccepted = o.IsAccepted
+                      IsAccepted = o.IsAccepted,
+                      Status = o.Status,
                   }).ToListAsync(cancellationToken);
         }
 
@@ -44,7 +46,24 @@ namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
         {
             var affcetedRow = await dbContext.Offers.Where(o => o.Id == offerId)
                 .ExecuteUpdateAsync(setter => setter
-                    .SetProperty(o => o.IsAccepted, true), cancellationToken);
+                    .SetProperty(o => o.IsAccepted, true)
+                    .SetProperty(o => o.Status, OfferStatus.Accepted), cancellationToken);
+            return affcetedRow > 0;
+        }
+
+        public async Task<List<int>> GetOfferIdsByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await dbContext.Offers
+                .AsNoTracking()
+                .Where(o => o.OrderId == orderId)
+                .Select(o => o.Id).ToListAsync(cancellationToken);
+        }
+
+        public async Task<bool> RejectOffer(int offerId, CancellationToken cancellationToken)
+        {
+            var affcetedRow = await dbContext.Offers.Where(o => o.Id == offerId)
+                .ExecuteUpdateAsync(setter => setter
+                    .SetProperty(o => o.Status, OfferStatus.Rejected), cancellationToken);
             return affcetedRow > 0;
         }
 
@@ -75,7 +94,8 @@ namespace Usta.Infrastructure.EFCore.Repositories.OfferAgg
                     ExpertName = o.Expert.FirstName + " " + o.Expert.LastName,
                     ImageUrl = o.ImageUrl,
                     StartDateTime = o.StartDateTime,
-                    IsAccepted = o.IsAccepted
+                    IsAccepted = o.IsAccepted,
+                    Status = o.Status,
                 }).ToListAsync(cancellationToken);
 
             return new PagedResult<OfferDto>()

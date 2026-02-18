@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Usta.Domain.Core.OfferAgg.Enums;
 
 namespace Usta.Domain.Core.OfferAgg.Dtos
 {
@@ -14,5 +15,6 @@ namespace Usta.Domain.Core.OfferAgg.Dtos
         public bool IsAccepted { get; set; }
         public int ExpertId { get; set; }
         public string ExpertName { get; set; }
+        public OfferStatus Status { get; set; }
     }
 }

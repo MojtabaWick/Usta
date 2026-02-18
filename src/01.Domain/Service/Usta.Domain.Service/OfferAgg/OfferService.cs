@@ -46,6 +46,35 @@ namespace Usta.Domain.Service.OfferAgg
             return await offerRepository.AcceptOffer(offerId, cancellationToken);
         }
 
+        public async Task<bool> RejectOtherOffers(int orderId, int acceptedOfferId, CancellationToken cancellationToken)
+        {
+            const int maxRetry = 5;
+
+            var offerIds = await offerRepository
+                .GetOfferIdsByOrderId(orderId, cancellationToken);
+
+            foreach (var offerId in offerIds.Where(id => id != acceptedOfferId))
+            {
+                var retryCount = 0;
+                var success = false;
+
+                while (!success && retryCount < maxRetry)
+                {
+                    success = await offerRepository
+                        .RejectOffer(offerId, cancellationToken);
+
+                    retryCount++;
+                }
+
+                if (!success)
+                {
+                    throw new Exception($"Failed to reject offer {offerId}");
+                }
+            }
+
+            return true;
+        }
+
         public async Task<PagedResult<OfferDto>> GetExpertOffers(int expertId, int pageNumber, int pageSize, string? search, CancellationToken cancellationToken)
         {
             return await offerRepository.GetExpertOffers(expertId, pageNumber, pageSize, search, cancellationToken);

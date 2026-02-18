@@ -22,6 +22,11 @@ namespace Usta.Infrastructure.EFCore.Configurations
 
             builder.HasQueryFilter(x => !x.IsDeleted);
 
+            builder.Property(x => x.Status)
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .IsRequired();
+
             builder.HasOne(x => x.Order)
                 .WithMany(x => x.Offers)
                 .HasForeignKey(x => x.OrderId)

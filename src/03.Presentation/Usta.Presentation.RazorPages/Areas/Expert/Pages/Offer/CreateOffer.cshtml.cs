@@ -28,13 +28,12 @@ namespace Usta.Presentation.RazorPages.Areas.Expert.Pages.Offer
             {
                 ModelState.AddModelError("DateError", "روز انتخابی نمیتواند گذشته باشد.");
             }
-
-            var result = await offerAppService.CreateOffer(Input, cancellationToken);
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            var result = await offerAppService.CreateOffer(Input, cancellationToken);
 
             if (!result.IsSuccess)
             {
