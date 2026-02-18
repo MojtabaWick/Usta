@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Usta.Domain.AppService.CategoryAgg;
 using Usta.Domain.AppService.CityAgg;
 using Usta.Domain.AppService.CommentAgg;
@@ -48,6 +49,23 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region Logging
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+
+    //console log
+    .WriteTo.Console()
+    // Info ? Seq
+    .WriteTo.Logger(lc => lc
+        .WriteTo.Seq("http://localhost:5341"))
+
+    .CreateBootstrapLogger();
+
+builder.Host.UseSerilog();
+
+#endregion Logging
 
 #region RegisterService
 
