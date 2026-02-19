@@ -41,6 +41,7 @@ using Usta.Infrastructure.EFCore.Repositories.OrderAgg;
 using Usta.Infrastructure.EFCore.Repositories.ProvidedServiceAgg;
 using Usta.Infrastructure.FileService.Contracts;
 using Usta.Infrastructure.FileService.Services;
+using Usta.Presentation.RazorPages.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -172,6 +173,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseMiddleware<LoggingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
