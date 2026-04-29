@@ -88,7 +88,7 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
-builder.Services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
+builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
     {
