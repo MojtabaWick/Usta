@@ -152,7 +152,7 @@ builder.Services.AddScoped<IOfferAppService, OfferAppService>();
 builder.Services.AddScoped<IOfferService, OfferService>();
 builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 
-builder.Services.AddScoped<ICacheService, InMemoryCacheService>();
+builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
 
 builder.Services.AddScoped<ICategoryDapperRepository, CategoryDapperRepository>();
 builder.Services.AddScoped<IProvidedServiceDapperRepository, ProvidedServiceDapperRepository>();
