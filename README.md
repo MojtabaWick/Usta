@@ -43,9 +43,9 @@ This project is built using **clean architecture**, **scalable backend patterns*
 Update the SQL Server connection string inside `appsettings.json`:
 
 ```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=.;Database=UstaDB;Trusted_Connection=True;"
-}
+  "ConnectionStrings": {
+    "SQL": "Server=.;Database=UstaDB;Trusted_Connection=True;"
+  }
 ```
 
 ---
