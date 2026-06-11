@@ -12,7 +12,7 @@ This project is built using **clean architecture**, **scalable backend patterns*
 ## 🛠️ **Technologies & Tools Used**
 
 ### **Backend**
-- ⚙️ **C# (.NET 7)**
+- ⚙️ **C# (.NET 10)**
 - 🧱 **Onion Architecture**
 - 🌐 **ASP.NET Core Web API**
 - 🧩 **Razor Pages**
